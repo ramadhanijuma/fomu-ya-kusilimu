@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mfumo wa Masjid Taqwa</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Inter:wght@300;400;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
+        .arabic { font-family: 'Amiri', serif; }
+        .input-line { border-bottom: 2px solid #e2e8f0; outline: none; transition: all 0.3s; width: 100%; background: transparent; padding: 4px 0; }
+        .input-line:focus { border-color: #059669; }
+        label { font-size: 11px; font-weight: 700; color: #475569; text-transform: uppercase; letter-spacing: 0.025em; }
+        @media print { .no-print { display: none !important; } .print-content { box-shadow: none !important; border: none !important; padding: 0 !important; } }
+    </style>
+</head>
+<body class="py-8 px-4">
+
+    <div class="max-w-4xl mx-auto bg-white shadow-2xl rounded-xl overflow-hidden print-content">
+        <div class="bg-[#064e3b] text-white p-8 text-center">
+            <h2 class="arabic text-3xl mb-2">بِسْمِ اللهِ الرَّحْمَنِ الرَّحِيمِ</h2>
+            <h1 class="text-2xl font-bold uppercase tracking-widest">FOMU RASMI YA KUSILIMU</h1>
+            <p class="text-sm font-medium mt-1">MASJID TAQWA - KIBAHA, MAILIMOJA</p>
+            <p class="text-[10px] opacity-80">Simu Na: +255 713 813 787</p>
+        </div>
+
+        <form id="submissionForm" class="p-8 space-y-10">
+            <section>
+                <div class="flex flex-col md:flex-row justify-between gap-6 mb-6">
+                    <h3 class="bg-emerald-900 text-white px-4 py-1 rounded font-bold text-sm uppercase self-start">1. Taarifa Binafsi</h3>
+                    <div class="w-32 h-40 border-2 border-dashed border-emerald-200 rounded flex items-center justify-center relative bg-emerald-50/30 overflow-hidden group">
+                        <input type="file" id="photoFile" accept="image/*" class="absolute inset-0 opacity-0 cursor-pointer z-10">
+                        <img id="photoPreview" class="hidden w-full h-full object-cover">
+                        <span id="photoTxt" class="text-[9px] text-center p-2 text-emerald-600 font-bold uppercase">Pakia Picha</span>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="md:col-span-1">
+                        <label>Jina Kamili</label>
+                        <input type="text" id="fullName" required oninput="syncName()" class="input-line uppercase font-semibold">
+                    </div>
+                    <div>
+                        <label>Tarehe ya Kuzaliwa</label>
+                        <input type="date" id="dob" class="input-line">
+                    </div>
+                    <div>
+                        <label>Jinsia</label>
+                        <div class="flex gap-4 py-1">
+                            <label class="flex items-center text-sm font-normal"><input type="radio" name="gender" value="Mwanaume" onclick="filterMaritalStatus('Mwanaume')" class="mr-2"> Mwanaume</label>
+                            <label class="flex items-center text-sm font-normal"><input type="radio" name="gender" value="Mwanamke" onclick="filterMaritalStatus('Mwanamke')" class="mr-2"> Mwanamke</label>
+                        </div>
+                    </div>
+                    <div>
+                        <label>Uraia</label>
+                        <select id="citizenship" class="input-line" onchange="updatePhoneCodes()">
+                            <option value="Tanzania">Tanzania</option>
+                            <option value="Kenya">Kenya</option>
+                            <option value="Uganda">Uganda</option>
+                            <option value="Rwanda">Rwanda</option>
+                            <option value="Burundi">Burundi</option>
+                            <option value="Nchi Nyingine">Nchi Nyingine</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label>Hali ya Ndoa</label>
+                        <select id="maritalStatus" class="input-line">
+                            <option value="">Chagua Jinsia Kwanza</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label>Namba ya Simu</label>
+                        <input type="tel" id="phone" value="+255" class="input-line" oninput="this.value = this.value.replace(/[^0-9+]/g, '')">
+                    </div>
+                </div>
+            </section>
+
+            <section class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="md:col-span-2">
+                    <label>Anwani ya Makazi</label>
+                    <input type="text" id="address" class="input-line">
+                </div>
+                <div>
+                    <label>Aina ya Kitambulisho</label>
+                    <div class="flex flex-wrap gap-3 py-1">
+                        <label class="text-[10px] flex items-center font-normal"><input type="checkbox" name="idType" value="NIDA" class="mr-1"> NIDA</label>
+                        <label class="text-[10px] flex items-center font-normal"><input type="checkbox" name="idType" value="Pasipoti" class="mr-1"> PASIPOTI</label>
+                        <label class="text-[10px] flex items-center font-normal"><input type="checkbox" name="idType" value="Leseni" class="mr-1"> LESENI</label>
+                        <label class="text-[10px] flex items-center font-normal"><input type="checkbox" name="idType" value="Kingine" class="mr-1"> KINGINE</label>
+                    </div>
+                </div>
+                <div>
+                    <label>Namba ya Kitambulisho</label>
+                    <input type="text" id="idNumber" class="input-line">
+                </div>
+            </section>
+
+            <section class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-6 border-t border-gray-100">
+                <div class="space-y-4">
+                    <label class="text-emerald-800">Dharura (Emergency)</label>
+                    <div><label>Mtu wa Karibu</label><input type="text" id="emergencyName" class="input-line"></div>
+                    <div><label>Simu ya Dharura</label><input type="tel" id="emergencyPhone" value="+255" class="input-line" oninput="this.value = this.value.replace(/[^0-9+]/g, '')"></div>
+                </div>
+                <div class="space-y-4">
+                    <label class="text-emerald-800">Maelezo ya Kidini</label>
+                    <div>
+                        <label>Dini uliyoifuata kabla</label>
+                        <select id="formerReligion" class="input-line">
+                            <option value="">-- Chagua Dini --</option>
+                            <option value="Ukristo">Ukristo</option>
+                            <option value="Uhindu">Uhindu</option>
+                            <option value="Ubuda">Ubuda</option>
+                            <option value="Ushirikina">Ushirikina/Jadi</option>
+                            <option value="Sina Dini">Sina Dini</option>
+                            <option value="Nyingine">Nyingine</option>
+                        </select>
+                    </div>
+                    <div><label>Jina jipya la Kiislamu</label><input type="text" id="islamicName" class="input-line font-bold text-emerald-700"></div>
+                </div>
+                <div class="md:col-span-2">
+                    <label>Sababu za kuingia kwenye Uislamu</label>
+                    <textarea id="reason" rows="2" class="w-full border-b-2 border-gray-100 outline-none focus:border-emerald-600 py-2 resize-none text-sm"></textarea>
+                </div>
+            </section>
+
+            <section class="bg-emerald-50 p-6 rounded-lg border border-emerald-100">
+                <p class="text-sm leading-relaxed text-center">
+                    Mimi <span id="tamkoJina" class="font-bold border-b border-emerald-900 px-2 min-w-[150px] inline-block">____________________</span> 
+                    nathibitisha kuwa nimeamua kuingia katika dini ya Kiislamu kwa hiari yangu, bila kulazimishwa wala kushawishiwa kwa maslahi ya kudunia. Nimetamka maneno ya Shahada:
+                </p>
+                <h4 class="arabic text-2xl font-bold text-center my-6 text-emerald-900">"أَشْهَدُ أَن لَّا إِلَهَ إِلَّا اللهُ وَحْدَهُ لَا شَرِيْكَ لَهُ، وَأَشْهَدُ أَنَّ مُحَمَّداً عَبْدُهُ وَرَسُوْلُهُ"</h4>
+                <p class="text-sm font-medium mt-1 italic leading-relaxed text-center">
+                    "Nashudia kuwa hapana mungu apasaye kuabudiwa kwa haki isipokuwa Allah, na nashudia kuwa Muhammad ni mja na mtume wake."
+                </p>
+                <div class="grid grid-cols-2 gap-8 mt-6">
+                    <div class="text-center"><div class="border-b border-gray-400 h-8"></div><span class="text-[9px] font-bold uppercase">Sahihi</span></div>
+                    <div class="text-center"><div id="dateDisplay" class="border-b border-gray-400 h-8 font-bold text-sm flex items-end justify-center"></div><span class="text-[9px] font-bold uppercase">Tarehe</span></div>
+                </div>
+            </section>
+
+            <section class="bg-gray-50 p-6 rounded-lg border-2 border-emerald-900">
+                <div class="flex flex-col md:flex-row items-center gap-6">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 flex-1 w-full">
+                        <div class="bg-white p-3 rounded border-l-4 border-red-600 shadow-sm">
+                            <label class="text-red-600">Namba ya Usajili (AUTO)</label>
+                            <input type="text" id="regNo" readonly class="w-full font-mono font-bold text-lg outline-none bg-transparent">
+                        </div>
+                        <div class="md:col-span-2">
+                            <label>Maoni ya Ofisi</label>
+                            <input type="text" id="officeNote" class="input-line">
+                        </div>
+                    </div>
+                    <div class="flex flex-col items-center justify-center bg-white p-2 border border-gray-200 rounded">
+                        <div id="qrcode"></div>
+                        <span class="text-[8px] font-bold mt-1 text-gray-400 uppercase">Verification QR</span>
+                    </div>
+                </div>
+            </section>
+
+            <div class="no-print flex gap-4">
+                <button type="submit" id="submitBtn" class="flex-1 bg-emerald-800 text-white font-bold py-4 rounded-lg hover:bg-emerald-900 transition-all uppercase tracking-widest">Hifadhi Taarifa</button>
+                <button type="button" onclick="window.print()" class="px-8 bg-gray-800 text-white font-bold rounded-lg hover:bg-black transition-all uppercase text-sm">Print</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxAO3Hp8Me1Xw3yypX2uRmlDk0VLqA_1VK_396saeUtgLap_Y7rAFTOz66Re6NuTi4SNg/exec';
+
+        function updatePhoneCodes() {
+            const country = document.getElementById('citizenship').value;
+            const phoneInput = document.getElementById('phone');
+            const emergencyInput = document.getElementById('emergencyPhone');
+            
+            const codes = {
+                'Tanzania': '+255',
+                'Kenya': '+254',
+                'Uganda': '+256',
+                'Rwanda': '+250',
+                'Burundi': '+257',
+                'Nchi Nyingine': '+'
+            };
+            
+            phoneInput.value = codes[country] || '+';
+            emergencyInput.value = codes[country] || '+';
+        }
+
+        function filterMaritalStatus(gender) {
+            const maritalSelect = document.getElementById('maritalStatus');
+            maritalSelect.innerHTML = '';
+            
+            const options = gender === 'Mwanaume' 
+                ? ['Sijaoa', 'Nimeoa', 'Nyingineyo']
+                : ['Sijaolewa', 'Nimeolewa', 'Nyingineyo'];
+            
+            options.forEach(opt => {
+                const el = document.createElement('option');
+                el.value = opt;
+                el.textContent = opt;
+                maritalSelect.appendChild(el);
+            });
+        }
+
+        function updateQRCode(text) {
+            const qrDiv = document.getElementById("qrcode");
+            qrDiv.innerHTML = "";
+            if(text) {
+                new QRCode(qrDiv, {
+                    text: text,
+                    width: 70,
+                    height: 70,
+                    colorDark : "#064e3b",
+                    colorLight : "#ffffff",
+                    correctLevel : QRCode.CorrectLevel.H
+                });
+            }
+        }
+
+        window.onload = function() {
+            const sasa = new Date();
+            // Kuzuia tarehe za mbeleni
+            document.getElementById('dob').max = sasa.toISOString().split("T")[0];
+            document.getElementById('dateDisplay').innerText = sasa.toLocaleDateString('sw-TZ');
+            const mwaka = sasa.getFullYear().toString().slice(-2);
+
+            fetch(SCRIPT_URL)
+                .then(response => response.text())
+                .then(namba => {
+                    const cleanNamba = namba.trim();
+                    const finalReg = `MTK/FRK/0${mwaka}/${cleanNamba.padStart(3, '0')}`;
+                    document.getElementById('regNo').value = finalReg;
+                    updateQRCode(finalReg);
+                })
+                .catch(() => {
+                    let last = localStorage.getItem('lastReg') || 0;
+                    let namba = parseInt(last) + 1;
+                    const finalReg = `MTK/FRK/0${mwaka}/${namba.toString().padStart(3, '0')}`;
+                    document.getElementById('regNo').value = finalReg;
+                    updateQRCode(finalReg);
+                });
+        };
+
+        function syncName() {
+            document.getElementById('tamkoJina').innerText = document.getElementById('fullName').value || "____________________";
+        }
+
+        document.getElementById('photoFile').onchange = e => {
+            const [file] = e.target.files;
+            if (file) {
+                if(!file.type.startsWith('image/')) {
+                    alert("Tafadhali pakia picha pekee.");
+                    e.target.value = "";
+                    return;
+                }
+                document.getElementById('photoPreview').src = URL.createObjectURL(file);
+                document.getElementById('photoPreview').classList.remove('hidden');
+                document.getElementById('photoTxt').classList.add('hidden');
+            }
+        }
+
+        document.getElementById('submissionForm').onsubmit = function(e) {
+    e.preventDefault();
+    const btn = document.getElementById('submitBtn');
+    
+    if(!document.querySelector('input[name="gender"]:checked')) {
+        alert("Tafadhali chagua Jinsia.");
+        return;
+    }
+
+    btn.innerText = "INAHIFADHI...";
+    btn.disabled = true;
+
+    // Hapa ndipo tunatengeneza muda wa hapa nyumbani (EAT)
+    const mudaWaSasa = new Date().toLocaleString('sw-TZ', { 
+        timeZone: 'Africa/Nairobi',
+        hour12: false // Ondoa hii ukitaka saa ionekane kama AM/PM
+    });
+
+    const data = {
+        regNo: document.getElementById('regNo').value,
+        fullName: document.getElementById('fullName').value,
+        dob: document.getElementById('dob').value,
+        gender: document.querySelector('input[name="gender"]:checked').value,
+        nationality: document.getElementById('citizenship').value,
+        phone: document.getElementById('phone').value,
+        address: document.getElementById('address').value,
+        maritalStatus: document.getElementById('maritalStatus').value,
+        idNumber: document.getElementById('idNumber').value,
+        emergencyName: document.getElementById('emergencyName').value,
+        emergencyPhone: document.getElementById('emergencyPhone').value,
+        formerReligion: document.getElementById('formerReligion').value,
+        islamicName: document.getElementById('islamicName').value,
+        reason: document.getElementById('reason').value,
+        officeNote: document.getElementById('officeNote').value,
+        timestamp: mudaWaSasa // Sasa itasave vizuri kama: 12/05/2026, 02:30:45
+    };
+
+    fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(data) })
+        .then(() => {
+            alert("Alhamdulillah! Taarifa zimehifadhiwa.");
+            const lastNum = document.getElementById('regNo').value.split('/').pop();
+            localStorage.setItem('lastReg', parseInt(lastNum));
+            location.reload();
+        })
+        .catch(() => {
+            alert("Tatizo la mtandao! Jaribu tena.");
+            btn.disabled = false;
+            btn.innerText = "HIFADHI TAARIFA";
+        });
+};
+    </script>
+</body>
+</html>
