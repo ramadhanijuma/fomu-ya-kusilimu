@@ -698,275 +698,55 @@
         </div>
 
         <!-- PAGE 2: Mawasiliano & Kitambulisho -->
-<div class="page" id="page-2">
-    <div class="section-title">
-        <span class="section-badge">2. Mawasiliano</span>
-        <div class="section-line"></div>
-    </div>
-
-    <div class="grid-2">
-
-        <div class="field span-2">
-            <label>Anwani ya Makazi</label>
-            <input type="text" id="address" placeholder="Andika Mtaa, Kata, Wilaya na Mkoa...">
-        </div>
-
-        <div class="field">
-            <label>Namba ya Simu</label>
-            <input type="tel" id="phone" value="+255"
-                   oninput="this.value = this.value.replace(/[^0-9+]/g, '')">
-        </div>
-
-        <!-- KITAMBULISHO -->
-        <div class="field span-2">
-
-            <label>Aina ya Kitambulisho</label>
-
-            <div class="check-group" id="idTypeGroup">
-
-                <label class="check-pill" onclick="selectIdType(this)">
-                    <input type="radio" name="idType" value="NIDA">
-                    NIDA
-                </label>
-
-                <label class="check-pill" onclick="selectIdType(this)">
-                    <input type="radio" name="idType" value="Pasipoti">
-                    Pasipoti
-                </label>
-
-                <label class="check-pill" onclick="selectIdType(this)">
-                    <input type="radio" name="idType" value="Leseni">
-                    Leseni
-                </label>
-
-                <label class="check-pill" onclick="selectIdType(this)">
-                    <input type="radio" name="idType" value="MpigaKura">
-                    Kadi ya Mpiga Kura
-                </label>
-
-                <label class="check-pill" onclick="selectIdType(this)">
-                    <input type="radio" name="idType" value="Kingine">
-                    Kingine
-                </label>
-
+        <div class="page" id="page-2">
+            <div class="section-title">
+                <span class="section-badge">2. Mawasiliano</span>
+                <div class="section-line"></div>
             </div>
-        </div>
 
-        <!-- NAMBA YA KITAMBULISHO -->
-        <div class="field span-2">
-
-            <label>Namba ya Kitambulisho</label>
-
-            <input type="text"
-                   id="idNumber"
-                   placeholder="Chagua aina ya kitambulisho kwanza">
-
-        </div>
-
-    </div>
-
-    <div class="divider"></div>
-
-    <!-- DHARURA -->
-    <div class="section-title">
-        <span class="section-badge">Dharura</span>
-        <div class="section-line"></div>
-    </div>
-
-    <div class="grid-2">
-
-        <div class="field">
-            <label>Mtu wa Karibu</label>
-            <input type="text" id="emergencyName"
-                   placeholder="Jina la mtu wa dharura">
-        </div>
-
-        <div class="field">
-            <label>Simu ya Dharura</label>
-            <input type="tel"
-                   id="emergencyPhone"
-                   value="+255"
-                   oninput="this.value = this.value.replace(/[^0-9+]/g, '')">
-        </div>
-
-    </div>
-
-    <div class="nav-row no-print">
-        <button class="btn btn-secondary" onclick="prevStep(2)">
-            ← Rudi
-        </button>
-
-        <button class="btn btn-primary" onclick="nextStep(2)">
-            Endelea →
-        </button>
-    </div>
-</div>
-
-<!-- SCRIPT YA KITAMBULISHO -->
-<script>
-
-let currentType = "";
-
-/* SELECT RADIO STYLE */
-function selectIdType(el) {
-
-    document.querySelectorAll('#idTypeGroup .check-pill')
-        .forEach(p => p.classList.remove('selected'));
-
-    el.classList.add('selected');
-
-    const radio = el.querySelector('input');
-
-    radio.checked = true;
-
-    setIdFormat(radio.value);
-}
-
-/* FORMAT SETUP */
-function setIdFormat(type) {
-
-    currentType = type;
-
-    const input = document.getElementById("idNumber");
-
-    input.value = "";
-
-    switch(type) {
-
-        case "NIDA":
-
-            input.placeholder = "19999999-00000-00001-00";
-            input.maxLength = 23;
-
-            break;
-
-
-        case "Pasipoti":
-
-            input.placeholder = "AB1234567";
-            input.maxLength = 9;
-
-            break;
-
-
-        case "Leseni":
-
-            input.placeholder = "TZ-1234-567890";
-            input.maxLength = 14;
-
-            break;
-
-
-        case "MpigaKura":
-
-            input.placeholder = "T-1234-5678-901-2";
-            input.maxLength = 18;
-
-            break;
-
-
-        case "Kingine":
-
-            input.placeholder = "Ingiza namba ya kitambulisho";
-            input.maxLength = 30;
-
-            break;
-    }
-}
-
-/* INPUT FORMATTER */
-document.getElementById("idNumber").addEventListener("input", function () {
-
-    let value = this.value;
-
-    switch(currentType) {
-
-        /* ================= NIDA ================= */
-        case "NIDA":
-
-            value = value.replace(/\D/g, "");
-
-            if(value.length > 8)
-                value = value.slice(0,8) + "-" + value.slice(8);
-
-            if(value.length > 14)
-                value = value.slice(0,14) + "-" + value.slice(14);
-
-            if(value.length > 20)
-                value = value.slice(0,20) + "-" + value.slice(20);
-
-            value = value.slice(0,23);
-
-            break;
-
-
-        /* ================= PASSPORT ================= */
-        case "Pasipoti":
-
-            value = value.toUpperCase()
-                         .replace(/[^A-Z0-9]/g, "");
-
-            value = value.slice(0,9);
-
-            break;
-
-
-        /* ================= LESENI ================= */
-        case "Leseni":
-
-            value = value.toUpperCase()
-                         .replace(/[^A-Z0-9]/g, "");
-
-            if(value.length > 2)
-                value = value.slice(0,2) + "-" + value.slice(2);
-
-            if(value.length > 7)
-                value = value.slice(0,7) + "-" + value.slice(7);
-
-            value = value.slice(0,14);
-
-            break;
-
-
-        /* ================= MPIGA KURA ================= */
-        case "MpigaKura":
-
-            value = value.toUpperCase()
-                         .replace(/[^A-Z0-9]/g, "");
-
-            if(value.length > 1)
-                value = value.slice(0,1) + "-" + value.slice(1);
-
-            if(value.length > 6)
-                value = value.slice(0,6) + "-" + value.slice(6);
-
-            if(value.length > 11)
-                value = value.slice(0,11) + "-" + value.slice(11);
-
-            if(value.length > 15)
-                value = value.slice(0,15) + "-" + value.slice(15);
-
-            value = value.slice(0,18);
-
-            break;
-
-
-        /* ================= KINGINE ================= */
-        case "Kingine":
-
-            value = value.replace(/[^A-Z0-9]/gi, "");
-
-            break;
-    }
-
-    this.value = value;
-});
-
-</script>
+            <div class="grid-2">
+                <div class="field span-2">
+                    <label>Anwani ya Makazi</label>
+                    <input type="text" id="address" placeholder="Andika Mtaa, Kata, Wilaya na Mkoa...">
+                </div>
+
+                <div class="field">
+                    <label>Namba ya Simu</label>
+                    <input type="tel" id="phone" value="+255" oninput="this.value = this.value.replace(/[^0-9+]/g, '')">
+                </div>
+
+                <!-- KITAMBULISHO -->
+                <div class="field span-2">
+                    <label>Aina ya Kitambulisho</label>
+                    <div class="check-group" id="idTypeGroup">
+                        <label class="check-pill" onclick="selectIdType(this)">
+                            <input type="radio" name="idType" value="NIDA"> NIDA
+                        </label>
+                        <label class="check-pill" onclick="selectIdType(this)">
+                            <input type="radio" name="idType" value="Pasipoti"> Pasipoti
+                        </label>
+                        <label class="check-pill" onclick="selectIdType(this)">
+                            <input type="radio" name="idType" value="Leseni"> Leseni
+                        </label>
+                        <label class="check-pill" onclick="selectIdType(this)">
+                            <input type="radio" name="idType" value="MpigaKura"> Kadi ya Mpiga Kura
+                        </label>
+                        <label class="check-pill" onclick="selectIdType(this)">
+                            <input type="radio" name="idType" value="Kingine"> Kingine
+                        </label>
+                    </div>
+                </div>
+
+                <!-- NAMBA YA KITAMBULISHO -->
+                <div class="field span-2">
+                    <label>Namba ya Kitambulisho</label>
+                    <input type="text" id="idNumber" placeholder="Chagua aina ya kitambulisho kwanza">
+                </div>
             </div>
 
             <div class="divider"></div>
 
+            <!-- DHARURA -->
             <div class="section-title">
                 <span class="section-badge">Dharura</span>
                 <div class="section-line"></div>
@@ -1011,40 +791,10 @@ document.getElementById("idNumber").addEventListener("input", function () {
                         </select>
                     </div>
                 </div>
+                
                 <div class="field">
-                    <label>Jina Jipya la Kiislamu</label>
-                    <input type="text" id="islamicName" placeholder="Jina la Kiislamu" style="font-weight:700; color:var(--forest);">
-                </div>
-                <div class="field span-2">
-                    <label>Sababu za Kuingia Kwenye Uislamu</label>
-                    <textarea id="reason" rows="3" placeholder="Eleza kwa ufupi sababu zilizokupelekea kusilimu..."></textarea>
-                </div>
-            </div>
-
-            <div class="divider"></div>
-
-            <!-- Declaration -->
-            <div class="declaration">
-                <p class="declaration-stmt">
-                    Mimi <span id="tamkoJina" class="declaration-name">____________________</span> 
-                    nathibitisha kuwa nimeamua kuingia katika dini ya Kiislamu kwa hiari yangu, bila kulazimishwa wala kushawishiwa kwa maslahi ya kidunia. Nimetamka maneno ya Shahada:
-                </p>
-                <div class="declaration-arabic">
-                    "أَشْهَدُ أَن لَّا إِلَهَ إِلَّا اللهُ وَحْدَهُ لَا شَرِيْكَ لَهُ، وَأَشْهَدُ أَنَّ مُحَمَّداً عَبْدُهُ وَرَسُوْلُهُ"
-                </div>
-                <div class="declaration-trans">
-                    "Nashudia kuwa hapana mungu apasaye kuabudiwa kwa haki isipokuwa Allah, na nashudia kuwa Muhammad ni mja na mtume wake."
-                </div>
-
-                <div class="sig-row">
-                    <div class="sig-box">
-                        <div class="sig-line"></div>
-                        <div class="sig-label">Sahihi ya Msilimu</div>
-                    </div>
-                    <div class="sig-box">
-                        <div class="sig-line" id="dateDisplay"></div>
-                        <div class="sig-label">Tarehe</div>
-                    </div>
+                    <label>Jina Jipya la Kiislamu (Kama Lipo)</label>
+                    <input type="text" id="islamicName" placeholder="Andika jina jipya hapa" style="text-transform:uppercase;">
                 </div>
             </div>
 
@@ -1054,251 +804,187 @@ document.getElementById("idNumber").addEventListener("input", function () {
             </div>
         </div>
 
-        <!-- PAGE 4: Uthibitisho & Ofisi -->
+        <!-- PAGE 4: Uthibitisho -->
         <div class="page" id="page-4">
             <div class="section-title">
-                <span class="section-badge">4. Uthibitisho & Ofisi</span>
+                <span class="section-badge">4. Uthibitisho na Sahihi</span>
                 <div class="section-line"></div>
             </div>
 
-            <!-- Summary -->
-            <div class="summary-grid" id="summaryGrid" style="margin-bottom:1.5rem;"></div>
+            <div class="declaration">
+                <div class="declaration-arabic">أشْهَدُ أَنْ لَا إِلَهَ إِلَّا اللَّهُ وَأشْهَدُ أَنَّ مُحَمَّدًا رَسُولُ اللَّهِ</div>
+                <div class="declaration-trans">"Nashuhudia ya kwamba hakuna Mola apasaye kuabudiwa kwa haki isipokuwa Allah, na nashuhudia ya kwamba Muhammad ni Mtume wa Allah."</div>
+                <div class="declaration-stmt" style="margin-top:1rem;">
+                    Mimi <span class="declaration-name" id="displayFullName">_________</span>, nimeamua kwa hiari yangu mwenyewe, bila kushurutishwa, kuingia katika Dini ya Uislamu.
+                </div>
+            </div>
+
+            <div class="sig-row">
+                <div class="sig-box">
+                    <div class="sig-line"></div>
+                    <div class="sig-label">Sahihi ya Mhusika</div>
+                </div>
+                <div class="sig-box">
+                    <div class="sig-line"></div>
+                    <div class="sig-label">Sahihi ya Shahidi</div>
+                </div>
+            </div>
 
             <div class="divider"></div>
 
-            <!-- Office section -->
             <div class="office-section">
-                <div class="reg-badge">
-                    <div class="reg-label">Namba ya Usajili</div>
-                    <div class="reg-value" id="regNo">MTK/FRK/026/---</div>
+                <div class="office-fields">
+                    <div class="reg-badge">
+                        <div class="reg-label">Namba ya Usajili Ofisini</div>
+                        <div class="reg-value">MSJ/T/____</div>
+                    </div>
                 </div>
-                <div class="office-note-field">
-                    <div class="office-note-label">Maoni ya Ofisi</div>
-                    <input type="text" id="officeNote" class="office-note-input" placeholder="Maelezo ya ziada ya ofisi...">
-                </div>
-                <div class="qr-wrap">
+                <div class="qr-wrap no-print">
+                    <div class="qr-label">Skani Hapa</div>
                     <div id="qrcode"></div>
-                    <div class="qr-label">Verification QR</div>
                 </div>
             </div>
 
             <div class="nav-row no-print">
                 <button class="btn btn-secondary" onclick="prevStep(4)">← Rudi</button>
-                <button class="btn btn-print" onclick="window.print()">🖨 Print</button>
-                <button class="btn btn-primary" id="submitBtn" onclick="submitForm()">✓ Hifadhi Taarifa</button>
+                <button class="btn btn-print" onclick="window.print()">🖨️ Chapisha Fomu</button>
             </div>
         </div>
 
-    </div><!-- /form-card -->
-</div><!-- /wrapper -->
+    </div>
+</div>
 
-<!-- TOAST -->
-<div class="toast" id="toast"></div>
-
+<!-- SCRIPTS ZOTE ZIKO HAPA -->
 <script>
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxAO3Hp8Me1Xw3yypX2uRmlDk0VLqA_1VK_396saeUtgLap_Y7rAFTOz66Re6NuTi4SNg/exec';
+    /* NAVEGATION YA PAGES */
+    function goToStep(step) {
+        document.querySelectorAll('.page').forEach(el => el.classList.remove('active'));
+        document.getElementById('page-' + step).classList.add('active');
 
-    // ── STEP NAVIGATION ──────────────────────────────────────────
-    let currentStep = 1;
-
-    function goToStep(n) {
-        if (n > currentStep) return; // only allow going back directly
-        switchToPage(n);
-    }
-
-    function nextStep(from) {
-        if (!validatePage(from)) return;
-        switchToPage(from + 1);
-        if (from + 1 === 4) buildSummary();
-    }
-
-    function prevStep(from) {
-        switchToPage(from - 1);
-    }
-
-    function switchToPage(n) {
-        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-        document.getElementById('page-' + n).classList.add('active');
-
-        document.querySelectorAll('.step').forEach((s, i) => {
-            s.classList.remove('active', 'done');
-            if (i + 1 < n) s.classList.add('done');
-            if (i + 1 === n) s.classList.add('active');
+        document.querySelectorAll('.step').forEach((el, index) => {
+            el.classList.remove('active', 'done');
+            if (index + 1 < step) {
+                el.classList.add('done');
+            } else if (index + 1 === step) {
+                el.classList.add('active');
+            }
         });
-
-        currentStep = n;
-        window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    // ── VALIDATION ───────────────────────────────────────────────
-    function validatePage(page) {
-        if (page === 1) {
-            const name = document.getElementById('fullName').value.trim();
-            const gender = document.querySelector('input[name="gender"]:checked');
-            if (!name) { showToast('⚠️ Tafadhali andika Jina Kamili.'); return false; }
-            if (!gender) { showToast('⚠️ Tafadhali chagua Jinsia.'); return false; }
-        }
-        return true;
+    function nextStep(currentStep) {
+        goToStep(currentStep + 1);
     }
 
-    // ── SYNC NAME IN DECLARATION ─────────────────────────────────
+    function prevStep(currentStep) {
+        goToStep(currentStep - 1);
+    }
+
+    /* KUBADILI JINA KWENYE DECLARATION */
     function syncName() {
-        const n = document.getElementById('fullName').value || '____________________';
-        document.getElementById('tamkoJina').innerText = n;
+        const fullName = document.getElementById('fullName').value;
+        document.getElementById('displayFullName').innerText = fullName ? fullName.toUpperCase() : "_________";
     }
 
-    // ── RADIO PILLS ──────────────────────────────────────────────
+    /* KUCHAGUA RADIO BUTTONS NA KUWEKA HALI YA NDOA */
     function selectRadio(el, name, value) {
-        document.querySelectorAll('.radio-pill').forEach(p => p.classList.remove('selected'));
+        let group = el.closest('.radio-group');
+        group.querySelectorAll('.radio-pill').forEach(p => p.classList.remove('selected'));
         el.classList.add('selected');
         el.querySelector('input').checked = true;
-        if (name === 'gender') filterMaritalStatus(value);
+
+        if (name === 'gender') {
+            const ms = document.getElementById('maritalStatus');
+            if (value === 'Mwanaume') {
+                ms.innerHTML = '<option value="Mseja">Mseja</option><option value="Mume wa Mke 1">Mume wa Mke 1</option><option value="Mume wa Wake Wengi">Mume wa Wake Wengi</option><option value="Talaka">Talaka</option><option value="Mjane">Mjane</option>';
+            } else {
+                ms.innerHTML = '<option value="Mseja">Mseja</option><option value="Mke wa Mtu">Mke wa Mtu</option><option value="Talaka">Talaka</option><option value="Mjane">Mjane</option>';
+            }
+        }
     }
 
-    function toggleCheck(el, name, value) {
-        el.classList.toggle('selected');
-        el.querySelector('input').checked = el.classList.contains('selected');
+    /* KUCHAGUA AINA YA KITAMBULISHO */
+    let currentType = "";
+    function selectIdType(el) {
+        document.querySelectorAll('#idTypeGroup .check-pill').forEach(p => p.classList.remove('selected'));
+        el.classList.add('selected');
+        const radio = el.querySelector('input');
+        radio.checked = true;
+        setIdFormat(radio.value);
     }
 
-    // ── MARITAL STATUS ───────────────────────────────────────────
-    function filterMaritalStatus(gender) {
-        const sel = document.getElementById('maritalStatus');
-        sel.innerHTML = '';
-        const opts = gender === 'Mwanaume'
-            ? ['Sijaoa', 'Nimeoa', 'Mtalaka', 'Mjane', 'Nyingineyo']
-            : ['Sijaolewa', 'Nimeolewa', 'Mtalaka', 'Mjane', 'Nyingineyo'];
-        opts.forEach(o => {
-            const el = document.createElement('option');
-            el.value = o; el.textContent = o;
-            sel.appendChild(el);
-        });
+    function setIdFormat(type) {
+        currentType = type;
+        const input = document.getElementById("idNumber");
+        input.value = "";
+
+        switch(type) {
+            case "NIDA":
+                input.placeholder = "19999999-00000-00001-00";
+                input.maxLength = 23;
+                break;
+            case "Pasipoti":
+                input.placeholder = "AB1234567";
+                input.maxLength = 9;
+                break;
+            case "Leseni":
+                input.placeholder = "TZ-1234-567890";
+                input.maxLength = 14;
+                break;
+            case "MpigaKura":
+                input.placeholder = "T-1234-5678-901-2";
+                input.maxLength = 18;
+                break;
+            case "Kingine":
+                input.placeholder = "Ingiza namba ya kitambulisho";
+                input.maxLength = 30;
+                break;
+        }
     }
 
-    // ── PHONE CODES ──────────────────────────────────────────────
-    function updatePhoneCodes() {
-        const codes = { Tanzania:'+255', Kenya:'+254', Uganda:'+256', Rwanda:'+250', Burundi:'+257', 'Nchi Nyingine':'+' };
-        const c = codes[document.getElementById('citizenship').value] || '+';
-        ['phone','emergencyPhone'].forEach(id => { document.getElementById(id).value = c; });
-    }
+    document.getElementById("idNumber").addEventListener("input", function () {
+        let value = this.value;
+        switch(currentType) {
+            case "NIDA":
+                value = value.replace(/\D/g, "");
+                if(value.length > 8) value = value.slice(0,8) + "-" + value.slice(8);
+                if(value.length > 14) value = value.slice(0,14) + "-" + value.slice(14);
+                if(value.length > 20) value = value.slice(0,20) + "-" + value.slice(20);
+                value = value.slice(0,23);
+                break;
+            case "Pasipoti":
+                value = value.toUpperCase().replace(/[^A-Z0-9]/g, "");
+                value = value.slice(0,9);
+                break;
+            case "Leseni":
+                value = value.toUpperCase().replace(/[^A-Z0-9]/g, "");
+                if(value.length > 2) value = value.slice(0,2) + "-" + value.slice(2);
+                if(value.length > 7) value = value.slice(0,7) + "-" + value.slice(7);
+                value = value.slice(0,14);
+                break;
+            case "MpigaKura":
+                value = value.toUpperCase().replace(/[^A-Z0-9]/g, "");
+                if(value.length > 1) value = value.slice(0,1) + "-" + value.slice(1);
+                if(value.length > 6) value = value.slice(0,6) + "-" + value.slice(6);
+                if(value.length > 11) value = value.slice(0,11) + "-" + value.slice(11);
+                if(value.length > 15) value = value.slice(0,15) + "-" + value.slice(15);
+                value = value.slice(0,18);
+                break;
+            case "Kingine":
+                value = value.replace(/[^A-Z0-9]/gi, "");
+                break;
+        }
+        this.value = value;
+    });
 
-    // ── QR CODE ──────────────────────────────────────────────────
-    function updateQRCode(text) {
-        const d = document.getElementById("qrcode");
-        d.innerHTML = "";
-        if (text) new QRCode(d, { text, width: 72, height: 72, colorDark:"#0a3622", colorLight:"#ffffff", correctLevel: QRCode.CorrectLevel.H });
-    }
-
-    // ── PHOTO UPLOAD ─────────────────────────────────────────────
-    document.getElementById('photoFile').onchange = e => {
-        const [file] = e.target.files;
-        if (!file || !file.type.startsWith('image/')) { showToast('⚠️ Tafadhali pakia picha pekee.'); return; }
-        const prev = document.getElementById('photoPreview');
-        prev.src = URL.createObjectURL(file);
-        prev.style.display = 'block';
-        document.getElementById('photoTxt').style.display = 'none';
-    };
-
-    // ── SUMMARY ──────────────────────────────────────────────────
-    function buildSummary() {
-        const gender = document.querySelector('input[name="gender"]:checked');
-        const idTypes = [...document.querySelectorAll('input[name="idType"]:checked')].map(i => i.value).join(', ');
-        const items = [
-            ['Jina Kamili', document.getElementById('fullName').value],
-            ['Jinsia', gender ? gender.value : '—'],
-            ['Tarehe ya Kuzaliwa', document.getElementById('dob').value || '—'],
-            ['Uraia', document.getElementById('citizenship').value],
-            ['Hali ya Ndoa', document.getElementById('maritalStatus').value || '—'],
-            ['Simu', document.getElementById('phone').value],
-            ['Anwani', document.getElementById('address').value || '—'],
-            ['Kitambulisho', idTypes || '—'],
-            ['Namba ya ID', document.getElementById('idNumber').value || '—'],
-            ['Dini ya Awali', document.getElementById('formerReligion').value || '—'],
-            ['Jina la Kiislamu', document.getElementById('islamicName').value || '—'],
-            ['Mtu wa Dharura', document.getElementById('emergencyName').value || '—'],
-        ];
-        const grid = document.getElementById('summaryGrid');
-        grid.innerHTML = items.map(([k, v]) => `
-            <div class="summary-item">
-                <div class="summary-key">${k}</div>
-                <div class="summary-val">${v}</div>
-            </div>`).join('');
-    }
-
-    // ── SUBMIT ───────────────────────────────────────────────────
-    function submitForm() {
-        const btn = document.getElementById('submitBtn');
-        const gender = document.querySelector('input[name="gender"]:checked');
-        if (!gender) { showToast('⚠️ Tafadhali chagua Jinsia.'); return; }
-
-        btn.textContent = "INAHIFADHI...";
-        btn.disabled = true;
-
-        const timestamp = new Date().toLocaleString('sw-TZ', { timeZone: 'Africa/Nairobi', hour12: false });
-        const idTypes = [...document.querySelectorAll('input[name="idType"]:checked')].map(i => i.value).join(', ');
-
-        const data = {
-            regNo: document.getElementById('regNo').innerText,
-            fullName: document.getElementById('fullName').value,
-            dob: document.getElementById('dob').value,
-            gender: gender.value,
-            nationality: document.getElementById('citizenship').value,
-            phone: document.getElementById('phone').value,
-            address: document.getElementById('address').value,
-            maritalStatus: document.getElementById('maritalStatus').value,
-            idType: idTypes,
-            idNumber: document.getElementById('idNumber').value,
-            emergencyName: document.getElementById('emergencyName').value,
-            emergencyPhone: document.getElementById('emergencyPhone').value,
-            formerReligion: document.getElementById('formerReligion').value,
-            islamicName: document.getElementById('islamicName').value,
-            reason: document.getElementById('reason').value,
-            officeNote: document.getElementById('officeNote').value,
-            timestamp
-        };
-
-        fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(data) })
-            .then(() => {
-                showToast('✅ Alhamdulillah! Taarifa zimehifadhiwa vizuri.');
-                const lastNum = document.getElementById('regNo').innerText.split('/').pop();
-                localStorage.setItem('lastReg', parseInt(lastNum));
-                setTimeout(() => location.reload(), 2500);
-            })
-            .catch(() => {
-                showToast('❌ Tatizo la mtandao! Jaribu tena.');
-                btn.disabled = false;
-                btn.textContent = "✓ Hifadhi Taarifa";
+    /* GENERATE QR CODE KWA AJILI YA OFISI */
+    window.onload = function() {
+        if(document.getElementById("qrcode")) {
+            new QRCode(document.getElementById("qrcode"), {
+                text: "Fomu Rasmi ya Kusilimu - Masjid Taqwa",
+                width: 70,
+                height: 70
             });
-    }
-
-    // ── TOAST ─────────────────────────────────────────────────────
-    function showToast(msg) {
-        const t = document.getElementById('toast');
-        t.textContent = msg;
-        t.classList.add('show');
-        setTimeout(() => t.classList.remove('show'), 3500);
-    }
-
-    // ── INIT ─────────────────────────────────────────────────────
-    window.onload = function () {
-        const now = new Date();
-        document.getElementById('dob').max = now.toISOString().split("T")[0];
-        document.getElementById('dateDisplay').innerText = now.toLocaleDateString('sw-TZ', { timeZone: 'Africa/Nairobi' });
-
-        const yr = now.getFullYear().toString().slice(-2);
-
-        fetch(SCRIPT_URL)
-            .then(r => r.text())
-            .then(n => {
-                const reg = `MTK/FRK/0${yr}/${n.trim().padStart(3, '0')}`;
-                document.getElementById('regNo').innerText = reg;
-                updateQRCode(reg);
-            })
-            .catch(() => {
-                const last = parseInt(localStorage.getItem('lastReg') || '0') + 1;
-                const reg = `MTK/FRK/0${yr}/${last.toString().padStart(3, '0')}`;
-                document.getElementById('regNo').innerText = reg;
-                updateQRCode(reg);
-            });
+        }
     };
 </script>
 </body>
