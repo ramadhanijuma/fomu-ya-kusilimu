@@ -636,7 +636,7 @@
                     <div class="grid-2" style="gap:1.25rem;">
                         <div class="field span-2">
                             <label>Jina Kamili *</label>
-                            <input type="text" id="fullName" placeholder="Andika jina lako kamili" oninput="syncName()" style="text-transform:uppercase; font-weight:600;">
+                            <input type="text" id="fullName" placeholder="Andika jina kamili" oninput="syncName()" style="text-transform:uppercase; font-weight:600;">
                         </div>
                         <div class="field">
                             <label>Tarehe ya Kuzaliwa</label>
@@ -707,33 +707,140 @@
             <div class="grid-2">
                 <div class="field span-2">
                     <label>Anwani ya Makazi</label>
-                    <input type="text" id="address" placeholder="Mtaa, Kata, Wilaya...">
+                    <input type="text" id="address" placeholder="Andika Mtaa, Kata, Wilaya na Mkoa...">
                 </div>
                 <div class="field">
                     <label>Namba ya Simu</label>
                     <input type="tel" id="phone" value="+255" oninput="this.value = this.value.replace(/[^0-9+]/g, '')">
                 </div>
                 <div class="field">
-                    <label>Aina ya Kitambulisho</label>
-                    <div class="check-group" id="idTypeGroup">
-                        <label class="check-pill" onclick="toggleCheck(this, 'idType', 'NIDA')">
-                            <input type="checkbox" name="idType" value="NIDA"> NIDA
-                        </label>
-                        <label class="check-pill" onclick="toggleCheck(this, 'idType', 'Pasipoti')">
-                            <input type="checkbox" name="idType" value="Pasipoti"> Pasipoti
-                        </label>
-                        <label class="check-pill" onclick="toggleCheck(this, 'idType', 'Leseni')">
-                            <input type="checkbox" name="idType" value="Leseni"> Leseni
-                        </label>
-                        <label class="check-pill" onclick="toggleCheck(this, 'idType', 'Kingine')">
-                            <input type="checkbox" name="idType" value="Kingine"> Kingine
-                        </label>
-                    </div>
-                </div>
-                <div class="field span-2">
-                    <label>Namba ya Kitambulisho</label>
-                    <input type="text" id="idNumber" placeholder="XX-XXXXX-XXXXX-XX">
-                </div>
+                    <div class="field span-2">
+    <label>Aina ya Kitambulisho</label>
+
+    <div class="check-group" id="idTypeGroup">
+
+        <label class="check-pill">
+            <input type="radio" name="idType" value="NIDA"
+                   onchange="setIdFormat(this.value)">
+            NIDA
+        </label>
+
+        <label class="check-pill">
+            <input type="radio" name="idType" value="Pasipoti"
+                   onchange="setIdFormat(this.value)">
+            Pasipoti
+        </label>
+
+        <label class="check-pill">
+            <input type="radio" name="idType" value="Leseni"
+                   onchange="setIdFormat(this.value)">
+            Leseni
+        </label>
+
+        <label class="check-pill">
+            <input type="radio" name="idType" value="MpigaKura"
+                   onchange="setIdFormat(this.value)">
+            Kadi ya Mpiga Kura
+        </label>
+
+        <label class="check-pill">
+            <input type="radio" name="idType" value="Kingine"
+                   onchange="setIdFormat(this.value)">
+            Kingine
+        </label>
+
+    </div>
+</div>
+
+<div class="field span-2">
+    <label>Namba ya Kitambulisho</label>
+
+    <input type="text"
+           id="idNumber"
+           placeholder="Chagua aina ya kitambulisho kwanza">
+</div>
+
+<script>
+
+let currentType = "";
+
+function setIdFormat(type) {
+
+    currentType = type;
+
+    const input = document.getElementById("idNumber");
+
+    input.value = "";
+
+    switch(type) {
+
+        case "NIDA":
+            input.placeholder = "XXXXXXXX-XXXXX-XXXXX-XX";
+            input.maxLength = 22;
+            break;
+
+        case "Pasipoti":
+            input.placeholder = "ABXXXXXXX";
+            input.maxLength = 9;
+            break;
+
+        case "Leseni":
+            input.placeholder = "TZ-XXXX-XXXXXX";
+            input.maxLength = 14;
+            break;
+
+        case "MpigaKura":
+            input.placeholder = "T-XXXX-XXXX-XXX-X";
+            input.maxLength = 15;
+            break;
+
+        case "Kingine":
+            input.placeholder = "Ingiza namba ya kitambulisho";
+            input.maxLength = 30;
+            break;
+    }
+}
+
+/* VALIDATION */
+document.getElementById("idNumber").addEventListener("input", function () {
+
+    let value = this.value;
+
+    switch(currentType) {
+
+        /* NIDA = Numbers + dash only */
+        case "NIDA":
+            value = value.replace(/[^0-9-]/g, "");
+            break;
+
+        /* Passport = Capital letters + numbers only */
+        case "Pasipoti":
+            value = value.toUpperCase()
+                         .replace(/[^A-Z0-9]/g, "");
+            break;
+
+        /* Leseni = Capital letters + numbers + dash */
+        case "Leseni":
+            value = value.toUpperCase()
+                         .replace(/[^A-Z0-9-]/g, "");
+            break;
+
+        /* Voter ID */
+        case "MpigaKura":
+            value = value.toUpperCase()
+                         .replace(/[^A-Z0-9-]/g, "");
+            break;
+
+        /* Other */
+        case "Kingine":
+            value = value.replace(/[^A-Z0-9-]/gi, "");
+            break;
+    }
+
+    this.value = value;
+});
+
+</script>
             </div>
 
             <div class="divider"></div>
