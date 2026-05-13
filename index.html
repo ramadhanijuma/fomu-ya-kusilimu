@@ -698,72 +698,131 @@
         </div>
 
         <!-- PAGE 2: Mawasiliano & Kitambulisho -->
-        <div class="page" id="page-2">
-            <div class="section-title">
-                <span class="section-badge">2. Mawasiliano</span>
-                <div class="section-line"></div>
+<div class="page" id="page-2">
+    <div class="section-title">
+        <span class="section-badge">2. Mawasiliano</span>
+        <div class="section-line"></div>
+    </div>
+
+    <div class="grid-2">
+
+        <div class="field span-2">
+            <label>Anwani ya Makazi</label>
+            <input type="text" id="address" placeholder="Andika Mtaa, Kata, Wilaya na Mkoa...">
+        </div>
+
+        <div class="field">
+            <label>Namba ya Simu</label>
+            <input type="tel" id="phone" value="+255"
+                   oninput="this.value = this.value.replace(/[^0-9+]/g, '')">
+        </div>
+
+        <!-- KITAMBULISHO -->
+        <div class="field span-2">
+
+            <label>Aina ya Kitambulisho</label>
+
+            <div class="check-group" id="idTypeGroup">
+
+                <label class="check-pill" onclick="selectIdType(this)">
+                    <input type="radio" name="idType" value="NIDA">
+                    NIDA
+                </label>
+
+                <label class="check-pill" onclick="selectIdType(this)">
+                    <input type="radio" name="idType" value="Pasipoti">
+                    Pasipoti
+                </label>
+
+                <label class="check-pill" onclick="selectIdType(this)">
+                    <input type="radio" name="idType" value="Leseni">
+                    Leseni
+                </label>
+
+                <label class="check-pill" onclick="selectIdType(this)">
+                    <input type="radio" name="idType" value="MpigaKura">
+                    Kadi ya Mpiga Kura
+                </label>
+
+                <label class="check-pill" onclick="selectIdType(this)">
+                    <input type="radio" name="idType" value="Kingine">
+                    Kingine
+                </label>
+
             </div>
+        </div>
 
-            <div class="grid-2">
-                <div class="field span-2">
-                    <label>Anwani ya Makazi</label>
-                    <input type="text" id="address" placeholder="Andika Mtaa, Kata, Wilaya na Mkoa...">
-                </div>
-                <div class="field">
-                    <label>Namba ya Simu</label>
-                    <input type="tel" id="phone" value="+255" oninput="this.value = this.value.replace(/[^0-9+]/g, '')">
-                </div>
-                <div class="field">
-                    <div class="field span-2">
-    <label>Aina ya Kitambulisho</label>
+        <!-- NAMBA YA KITAMBULISHO -->
+        <div class="field span-2">
 
-    <div class="check-group" id="idTypeGroup">
+            <label>Namba ya Kitambulisho</label>
 
-        <label class="check-pill">
-            <input type="radio" name="idType" value="NIDA"
-                   onchange="setIdFormat(this.value)">
-            NIDA
-        </label>
+            <input type="text"
+                   id="idNumber"
+                   placeholder="Chagua aina ya kitambulisho kwanza">
 
-        <label class="check-pill">
-            <input type="radio" name="idType" value="Pasipoti"
-                   onchange="setIdFormat(this.value)">
-            Pasipoti
-        </label>
+        </div>
 
-        <label class="check-pill">
-            <input type="radio" name="idType" value="Leseni"
-                   onchange="setIdFormat(this.value)">
-            Leseni
-        </label>
+    </div>
 
-        <label class="check-pill">
-            <input type="radio" name="idType" value="MpigaKura"
-                   onchange="setIdFormat(this.value)">
-            Kadi ya Mpiga Kura
-        </label>
+    <div class="divider"></div>
 
-        <label class="check-pill">
-            <input type="radio" name="idType" value="Kingine"
-                   onchange="setIdFormat(this.value)">
-            Kingine
-        </label>
+    <!-- DHARURA -->
+    <div class="section-title">
+        <span class="section-badge">Dharura</span>
+        <div class="section-line"></div>
+    </div>
 
+    <div class="grid-2">
+
+        <div class="field">
+            <label>Mtu wa Karibu</label>
+            <input type="text" id="emergencyName"
+                   placeholder="Jina la mtu wa dharura">
+        </div>
+
+        <div class="field">
+            <label>Simu ya Dharura</label>
+            <input type="tel"
+                   id="emergencyPhone"
+                   value="+255"
+                   oninput="this.value = this.value.replace(/[^0-9+]/g, '')">
+        </div>
+
+    </div>
+
+    <div class="nav-row no-print">
+        <button class="btn btn-secondary" onclick="prevStep(2)">
+            ← Rudi
+        </button>
+
+        <button class="btn btn-primary" onclick="nextStep(2)">
+            Endelea →
+        </button>
     </div>
 </div>
 
-<div class="field span-2">
-    <label>Namba ya Kitambulisho</label>
-
-    <input type="text"
-           id="idNumber"
-           placeholder="Chagua aina ya kitambulisho kwanza">
-</div>
-
+<!-- SCRIPT YA KITAMBULISHO -->
 <script>
 
 let currentType = "";
 
+/* SELECT RADIO STYLE */
+function selectIdType(el) {
+
+    document.querySelectorAll('#idTypeGroup .check-pill')
+        .forEach(p => p.classList.remove('selected'));
+
+    el.classList.add('selected');
+
+    const radio = el.querySelector('input');
+
+    radio.checked = true;
+
+    setIdFormat(radio.value);
+}
+
+/* FORMAT SETUP */
 function setIdFormat(type) {
 
     currentType = type;
@@ -775,65 +834,128 @@ function setIdFormat(type) {
     switch(type) {
 
         case "NIDA":
-            input.placeholder = "XXXXXXXX-XXXXX-XXXXX-XX";
-            input.maxLength = 22;
+
+            input.placeholder = "19999999-00000-00001-00";
+            input.maxLength = 23;
+
             break;
+
 
         case "Pasipoti":
-            input.placeholder = "ABXXXXXXX";
+
+            input.placeholder = "AB1234567";
             input.maxLength = 9;
+
             break;
+
 
         case "Leseni":
-            input.placeholder = "TZ-XXXX-XXXXXX";
+
+            input.placeholder = "TZ-1234-567890";
             input.maxLength = 14;
+
             break;
+
 
         case "MpigaKura":
-            input.placeholder = "T-XXXX-XXXX-XXX-X";
-            input.maxLength = 15;
+
+            input.placeholder = "T-1234-5678-901-2";
+            input.maxLength = 18;
+
             break;
 
+
         case "Kingine":
+
             input.placeholder = "Ingiza namba ya kitambulisho";
             input.maxLength = 30;
+
             break;
     }
 }
 
-/* VALIDATION */
+/* INPUT FORMATTER */
 document.getElementById("idNumber").addEventListener("input", function () {
 
     let value = this.value;
 
     switch(currentType) {
 
-        /* NIDA = Numbers + dash only */
+        /* ================= NIDA ================= */
         case "NIDA":
-            value = value.replace(/[^0-9-]/g, "");
+
+            value = value.replace(/\D/g, "");
+
+            if(value.length > 8)
+                value = value.slice(0,8) + "-" + value.slice(8);
+
+            if(value.length > 14)
+                value = value.slice(0,14) + "-" + value.slice(14);
+
+            if(value.length > 20)
+                value = value.slice(0,20) + "-" + value.slice(20);
+
+            value = value.slice(0,23);
+
             break;
 
-        /* Passport = Capital letters + numbers only */
+
+        /* ================= PASSPORT ================= */
         case "Pasipoti":
+
             value = value.toUpperCase()
                          .replace(/[^A-Z0-9]/g, "");
+
+            value = value.slice(0,9);
+
             break;
 
-        /* Leseni = Capital letters + numbers + dash */
+
+        /* ================= LESENI ================= */
         case "Leseni":
+
             value = value.toUpperCase()
-                         .replace(/[^A-Z0-9-]/g, "");
+                         .replace(/[^A-Z0-9]/g, "");
+
+            if(value.length > 2)
+                value = value.slice(0,2) + "-" + value.slice(2);
+
+            if(value.length > 7)
+                value = value.slice(0,7) + "-" + value.slice(7);
+
+            value = value.slice(0,14);
+
             break;
 
-        /* Voter ID */
+
+        /* ================= MPIGA KURA ================= */
         case "MpigaKura":
+
             value = value.toUpperCase()
-                         .replace(/[^A-Z0-9-]/g, "");
+                         .replace(/[^A-Z0-9]/g, "");
+
+            if(value.length > 1)
+                value = value.slice(0,1) + "-" + value.slice(1);
+
+            if(value.length > 6)
+                value = value.slice(0,6) + "-" + value.slice(6);
+
+            if(value.length > 11)
+                value = value.slice(0,11) + "-" + value.slice(11);
+
+            if(value.length > 15)
+                value = value.slice(0,15) + "-" + value.slice(15);
+
+            value = value.slice(0,18);
+
             break;
 
-        /* Other */
+
+        /* ================= KINGINE ================= */
         case "Kingine":
-            value = value.replace(/[^A-Z0-9-]/gi, "");
+
+            value = value.replace(/[^A-Z0-9]/gi, "");
+
             break;
     }
 
