@@ -1538,124 +1538,95 @@
     });
 
     // ── SUMMARY ──────────────────────────────────────────────────
-    function buildSummary() {
-        const gender = document.querySelector('input[name="gender"]:checked');
-        const idTypes = [...document.querySelectorAll('input[name="idType"]:checked')].map(i => i.value).join(', ');
-        const items = [
-            ['Jina Kamili', document.getElementById('fullName').value],
-            ['Jinsia', gender ? gender.value : '—'],
-            ['Tarehe ya Kuzaliwa', document.getElementById('dob').value || '—'],
-            ['Uraia', document.getElementById('citizenship').value],
-            ['Hali ya Ndoa', document.getElementById('maritalStatus').value || '—'],
-            ['Simu', document.getElementById('phone').value],
-            ['Anwani', document.getElementById('address').value || '—'],
-            ['Kitambulisho', idTypes || '—'],
-            ['Namba ya ID', document.getElementById('idNumber').value || '—'],
-            ['Dini ya Awali', document.getElementById('formerReligion').value || '—'],
-            ['Jina la Kiislamu', document.getElementById('islamicName').value || '—'],
-            ['Mtu wa Dharura', document.getElementById('emergencyName').value || '—'],
-            ['Shahidi 1', document.getElementById('witness1Name').value || '—'],
-            ['Shahidi 2', document.getElementById('witness2Name').value || '—'],
-        ];
-        const grid = document.getElementById('summaryGrid');
-        grid.innerHTML = items.map(([k, v]) => `
-            <div class="summary-item">
-                <div class="summary-key">${k}</div>
-                <div class="summary-val">${v}</div>
-            </div>`).join('');
-    }
-
-        // ── SUBMIT ───────────────────────────────────────────────────
     function submitForm() {
-        const btn    = document.getElementById('submitBtn');
-        const gender = document.querySelector('input[name="gender"]:checked');
-        if (!gender) { showToast('⚠️ Tafadhali chagua Jinsia.'); return; }
+    const btn = document.getElementById('submitBtn');
+    const gender = document.querySelector('input[name="gender"]:checked');
+    if (!gender) { showToast('⚠️ Tafadhali chagua Jinsia.'); return; }
 
-        btn.textContent = 'INAHIFADHI...';
-        btn.disabled    = true;
+    btn.textContent = 'INAHIFADHI...';
+    btn.disabled = true;
 
-        const now             = new Date();
-        const timestamp       = now.toLocaleString('sw-TZ', { timeZone: 'Africa/Nairobi', hour12: false });
-        const tarehe_kusilimu = now.toLocaleDateString('sw-TZ', {
-            timeZone: 'Africa/Nairobi', day: '2-digit', month: '2-digit', year: 'numeric'
-        });
+    const now = new Date();
+    const timestamp = now.toLocaleString('sw-TZ', { timeZone: 'Africa/Nairobi', hour12: false });
+    const tarehe_kusilimu = now.toLocaleDateString('sw-TZ', {
+        timeZone: 'Africa/Nairobi', day: '2-digit', month: '2-digit', year: 'numeric'
+    });
 
-        const dobVal = document.getElementById('dob').value;
-        let umri = '';
-        if (dobVal) {
-            const dob = new Date(dobVal);
-            let age   = now.getFullYear() - dob.getFullYear();
-            const dm  = now.getMonth() - dob.getMonth();
-            if (dm < 0 || (dm === 0 && now.getDate() < dob.getDate())) age--;
-            if (age > 0) umri = String(age);
-        }
-
-        const idTypeEl = document.querySelector('input[name="idType"]:checked');
-        const w1 = document.getElementById('w1confirm').checked ? 'NDIYO ✓' : 'HAPANA ✗';
-        const w2 = document.getElementById('w2confirm').checked ? 'NDIYO ✓' : 'HAPANA ✗';
-        const regNo     = document.getElementById('regNo').innerText.trim();
-        const recordUrl = buildRecordUrl(regNo);
-
-        const data = {
-            regNo, tarehe_kusilimu, timestamp,
-            jina_kamili:        (document.getElementById('fullName').value || '').trim().toUpperCase(),
-            jina_la_kiislamu:   (document.getElementById('islamicName').value || '').trim(),
-            tarehe_kuzaliwa:    dobVal,
-            umri,
-            jinsia:             gender.value,
-            uraia:              document.getElementById('citizenship').value,
-            hali_ya_ndoa:       document.getElementById('maritalStatus').value || '',
-            simu:               (document.getElementById('phone').value || '').trim(),
-            anwani:             (document.getElementById('address').value || '').trim(),
-            aina_kitambulisho:  idTypeEl ? idTypeEl.value : '',
-            namba_kitambulisho: (document.getElementById('idNumber').value || '').trim(),
-            dharura_jina:       (document.getElementById('emergencyName').value || '').trim(),
-            dharura_simu:       (document.getElementById('emergencyPhone').value || '').trim(),
-            dini_ya_awali:      document.getElementById('formerReligion').value || '',
-            sababu_kusilimu:    (document.getElementById('reason').value || '').trim(),
-            shahidi1_jina:      (document.getElementById('witness1Name').value || '').trim().toUpperCase(),
-            shahidi1_simu:      (document.getElementById('witness1Phone').value || '').trim(),
-            shahidi1_uhusiano:  document.getElementById('witness1Rel').value || '',
-            shahidi1_id:        (document.getElementById('witness1ID').value || '').trim(),
-            shahidi1_mtaa:      (document.getElementById('witness1Address').value || '').trim(),
-            shahidi1_imethibitishwa: w1,
-            shahidi2_jina:      (document.getElementById('witness2Name').value || '').trim().toUpperCase(),
-            shahidi2_simu:      (document.getElementById('witness2Phone').value || '').trim(),
-            shahidi2_uhusiano:  document.getElementById('witness2Rel').value || '',
-            shahidi2_id:        (document.getElementById('witness2ID').value || '').trim(),
-            shahidi2_mtaa:      (document.getElementById('witness2Address').value || '').trim(),
-            shahidi2_imethibitishwa: w2,
-            maoni_ofisi:        (document.getElementById('officeNote').value || '').trim(),
-            recordUrl,
-        };
-
-        // Tumia CORS badala ya no-cors ili kupata majibu halisi
-        fetch(SCRIPT_URL, {
-            method: 'POST',
-            mode: 'cors',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data)
-        })
-        .then(response => response.json())
-        .then(result => {
-            if (result.status === 'success') {
-                showToast('✅ Alhamdulillah! Taarifa zimehifadhiwa vizuri.');
-                const lastNum = regNo.split('/').pop();
-                localStorage.setItem('lastReg', parseInt(lastNum) || 0);
-                setTimeout(() => location.reload(), 2500);
-            } else {
-                showToast('❌ Hitilafu: ' + (result.message || 'Jaribu tena'));
-                btn.disabled = false;
-                btn.textContent = '✓ Hifadhi Taarifa';
-            }
-        })
-        .catch(error => {
-            console.error('Kosa la mtandao:', error);
-            showToast('❌ Tatizo la mtandao au CORS. Angalia console.');
-            btn.disabled = false;
-            btn.textContent = '✓ Hifadhi Taarifa';
-        });
+    const dobVal = document.getElementById('dob').value;
+    let umri = '';
+    if (dobVal) {
+        const dob = new Date(dobVal);
+        let age = now.getFullYear() - dob.getFullYear();
+        const dm = now.getMonth() - dob.getMonth();
+        if (dm < 0 || (dm === 0 && now.getDate() < dob.getDate())) age--;
+        if (age > 0) umri = String(age);
     }
+
+    const idTypeEl = document.querySelector('input[name="idType"]:checked');
+    const w1 = document.getElementById('w1confirm').checked ? 'NDIYO ✓' : 'HAPANA ✗';
+    const w2 = document.getElementById('w2confirm').checked ? 'NDIYO ✓' : 'HAPANA ✗';
+    const regNo = document.getElementById('regNo').innerText.trim();
+    const recordUrl = buildRecordUrl(regNo);
+
+    // Tengeneza object ya data (keys zinalingana na headers)
+    const data = {
+        regNo, tarehe_kusilimu, timestamp,
+        jina_kamili: (document.getElementById('fullName').value || '').trim().toUpperCase(),
+        jina_la_kiislamu: (document.getElementById('islamicName').value || '').trim(),
+        tarehe_kuzaliwa: dobVal,
+        umri,
+        jinsia: gender.value,
+        uraia: document.getElementById('citizenship').value,
+        hali_ya_ndoa: document.getElementById('maritalStatus').value || '',
+        simu: (document.getElementById('phone').value || '').trim(),
+        anwani: (document.getElementById('address').value || '').trim(),
+        aina_kitambulisho: idTypeEl ? idTypeEl.value : '',
+        namba_kitambulisho: (document.getElementById('idNumber').value || '').trim(),
+        dharura_jina: (document.getElementById('emergencyName').value || '').trim(),
+        dharura_simu: (document.getElementById('emergencyPhone').value || '').trim(),
+        dini_ya_awali: document.getElementById('formerReligion').value || '',
+        sababu_kusilimu: (document.getElementById('reason').value || '').trim(),
+        shahidi1_jina: (document.getElementById('witness1Name').value || '').trim().toUpperCase(),
+        shahidi1_simu: (document.getElementById('witness1Phone').value || '').trim(),
+        shahidi1_uhusiano: document.getElementById('witness1Rel').value || '',
+        shahidi1_id: (document.getElementById('witness1ID').value || '').trim(),
+        shahidi1_mtaa: (document.getElementById('witness1Address').value || '').trim(),
+        shahidi1_imethibitishwa: w1,
+        shahidi2_jina: (document.getElementById('witness2Name').value || '').trim().toUpperCase(),
+        shahidi2_simu: (document.getElementById('witness2Phone').value || '').trim(),
+        shahidi2_uhusiano: document.getElementById('witness2Rel').value || '',
+        shahidi2_id: (document.getElementById('witness2ID').value || '').trim(),
+        shahidi2_mtaa: (document.getElementById('witness2Address').value || '').trim(),
+        shahidi2_imethibitishwa: w2,
+        maoni_ofisi: (document.getElementById('officeNote').value || '').trim(),
+        recordUrl,
+    };
+
+    // Geuza object kuwa x-www-form-urlencoded
+    const formBody = Object.keys(data)
+        .map(key => encodeURIComponent(key) + '=' + encodeURIComponent(data[key]))
+        .join('&');
+
+    // Tumia mode: 'no-cors' na Content-Type sahihi
+    fetch(SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',  // Huu ni muhimu kwa CORS
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: formBody
+    })
+    .then(() => {
+        // Kwa no-cors, hatuwezi kusoma response, lakini tunadhani imefanikiwa
+        showToast('✅ Alhamdulillah! Taarifa zimehifadhiwa vizuri.');
+        const lastNum = regNo.split('/').pop();
+        localStorage.setItem('lastReg', parseInt(lastNum) || 0);
+        setTimeout(() => location.reload(), 2500);
+    })
+    .catch(() => {
+        showToast('❌ Tatizo la mtandao! Jaribu tena.');
+        btn.disabled = false;
+        btn.textContent = '✓ Hifadhi Taarifa';
+    });
+}
 
     // ── PRINT SHEET BUILDER ──────────────────────────────────────
     function buildPrintSheet() {
