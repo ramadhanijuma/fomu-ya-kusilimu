@@ -1,1920 +1,1409 @@
 <!DOCTYPE html>
 <html lang="sw">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fomu Rasmi ya Kusilimu – Masjid Taqwa</title>
-    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Noto+Serif:wght@400;700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-        :root {
-            --forest: #0a3622;
-            --forest-mid: #155235;
-            --forest-light: #1a6b42;
-            --gold: #c9933a;
-            --gold-light: #e8b96a;
-            --cream: #faf7f2;
-            --parchment: #f2ead8;
-            --ink: #1a1a1a;
-            --muted: #6b7280;
-            --border: #d6cdb8;
-            --error: #b91c1c;
-            --shadow: 0 4px 24px rgba(10,54,34,0.10);
-            --radius: 12px;
-        }
-
-        body {
-            font-family: 'DM Sans', sans-serif;
-            background: var(--parchment);
-            background-image:
-                radial-gradient(ellipse at 20% 10%, rgba(10,54,34,0.06) 0%, transparent 50%),
-                radial-gradient(ellipse at 80% 90%, rgba(201,147,58,0.07) 0%, transparent 50%);
-            min-height: 100vh;
-            padding: 2rem 1rem;
-            color: var(--ink);
-        }
-
-        /* ── WRAPPER ── */
-        .wrapper {
-            max-width: 860px;
-            margin: 0 auto;
-        }
-
-        /* ── HEADER ── */
-        .header {
-            background: linear-gradient(160deg, var(--forest) 0%, var(--forest-mid) 60%, var(--forest-light) 100%);
-            color: white;
-            border-radius: var(--radius) var(--radius) 0 0;
-            padding: 2.5rem 2rem 2rem;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .header::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-            pointer-events: none;
-        }
-
-        .header-ornament {
-            font-family: 'Amiri', serif;
-            font-size: 2.2rem;
-            color: var(--gold-light);
-            letter-spacing: 0.05em;
-            margin-bottom: 0.5rem;
-            text-shadow: 0 2px 8px rgba(0,0,0,0.3);
-        }
-
-        .header h1 {
-            font-family: 'Noto Serif', serif;
-            font-size: 1.45rem;
-            font-weight: 700;
-            letter-spacing: 0.12em;
-            text-transform: uppercase;
-            margin-bottom: 0.4rem;
-        }
-
-        .header-sub { font-size: 0.8rem; opacity: 0.85; letter-spacing: 0.08em; }
-        .header-phone { font-size: 0.72rem; opacity: 0.65; margin-top: 0.2rem; }
-
-        .gold-line {
-            width: 60px;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, var(--gold-light), transparent);
-            margin: 0.9rem auto;
-        }
-
-        /* ── PROGRESS BAR ── */
-        .progress-wrap {
-            background: white;
-            padding: 1rem 2rem;
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            gap: 0;
-        }
-
-        .step {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 0.3rem;
-            position: relative;
-            cursor: pointer;
-        }
-
-        .step::after {
-            content: '';
-            position: absolute;
-            top: 15px;
-            left: 50%;
-            width: 100%;
-            height: 2px;
-            background: var(--border);
-            z-index: 0;
-        }
-
-        .step:last-child::after { display: none; }
-
-        .step-dot {
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            background: var(--border);
-            color: var(--muted);
-            font-size: 0.75rem;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            z-index: 1;
-            transition: all 0.3s;
-        }
-
-        .step.active .step-dot {
-            background: var(--forest);
-            color: white;
-            box-shadow: 0 0 0 4px rgba(10,54,34,0.15);
-        }
-
-        .step.done .step-dot {
-            background: var(--gold);
-            color: white;
-        }
-
-        .step.done::after, .step.active::after {
-            background: var(--forest);
-        }
-
-        .step-label {
-            font-size: 0.65rem;
-            font-weight: 600;
-            color: var(--muted);
-            text-transform: uppercase;
-            letter-spacing: 0.04em;
-            text-align: center;
-        }
-
-        .step.active .step-label { color: var(--forest); }
-
-        /* ── FORM CARD ── */
-        .form-card {
-            background: white;
-            border-radius: 0 0 var(--radius) var(--radius);
-            box-shadow: var(--shadow);
-            overflow: hidden;
-        }
-
-        /* ── PAGES ── */
-        .page { display: none; padding: 2rem; animation: fadeIn 0.3s ease; }
-        .page.active { display: block; }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(8px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* ── SECTION TITLES ── */
-        .section-title {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .section-badge {
-            background: var(--forest);
-            color: white;
-            font-size: 0.65rem;
-            font-weight: 700;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-            padding: 0.35rem 0.85rem;
-            border-radius: 20px;
-        }
-
-        .section-line {
-            flex: 1;
-            height: 1px;
-            background: var(--border);
-        }
-
-        /* ── GRID ── */
-        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
-        .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.25rem; }
-        .span-2 { grid-column: span 2; }
-        .span-3 { grid-column: span 3; }
-
-        @media (max-width: 640px) {
-            .grid-2, .grid-3 { grid-template-columns: 1fr; }
-            .span-2, .span-3 { grid-column: span 1; }
-            .progress-wrap { padding: 0.75rem 1rem; }
-            .page { padding: 1.25rem; }
-            .step-label { display: none; }
-        }
-
-        /* ── FIELD ── */
-        .field { display: flex; flex-direction: column; gap: 0.4rem; }
-
-        .field label, .field-label {
-            font-size: 0.68rem;
-            font-weight: 700;
-            color: var(--muted);
-            text-transform: uppercase;
-            letter-spacing: 0.06em;
-        }
-
-        .field input[type="text"],
-        .field input[type="tel"],
-        .field input[type="date"],
-        .field select,
-        .field textarea {
-            font-family: 'DM Sans', sans-serif;
-            font-size: 0.9rem;
-            color: var(--ink);
-            background: var(--cream);
-            border: 1.5px solid var(--border);
-            border-radius: 8px;
-            padding: 0.6rem 0.85rem;
-            transition: border-color 0.2s, box-shadow 0.2s;
-            width: 100%;
-            appearance: none;
-            -webkit-appearance: none;
-        }
-
-        .field input:focus,
-        .field select:focus,
-        .field textarea:focus {
-            outline: none;
-            border-color: var(--forest);
-            box-shadow: 0 0 0 3px rgba(10,54,34,0.08);
-            background: white;
-        }
-
-        .field input.error, .field select.error { border-color: var(--error); }
-
-        .field textarea { resize: vertical; min-height: 80px; }
-
-        /* ── PHOTO UPLOAD ── */
-        .photo-wrap {
-            width: 120px;
-            height: 150px;
-            border: 2px dashed var(--border);
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-            background: var(--cream);
-            transition: border-color 0.2s;
-            flex-shrink: 0;
-        }
-
-        .photo-wrap:hover { border-color: var(--forest); }
-
-        .photo-wrap input {
-            position: absolute;
-            inset: 0;
-            opacity: 0;
-            cursor: pointer;
-            z-index: 2;
-        }
-
-        .photo-wrap img { width: 100%; height: 100%; object-fit: cover; display: none; }
-
-        .photo-placeholder {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 0.4rem;
-            color: var(--forest);
-            font-size: 0.62rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            text-align: center;
-            padding: 0.5rem;
-        }
-
-        .photo-icon { font-size: 1.8rem; opacity: 0.5; }
-
-        /* ── RADIO / CHECKBOX ── */
-        .radio-group, .check-group {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.6rem;
-            padding-top: 0.2rem;
-        }
-
-        .radio-pill, .check-pill {
-            display: flex;
-            align-items: center;
-            gap: 0.4rem;
-            background: var(--cream);
-            border: 1.5px solid var(--border);
-            border-radius: 20px;
-            padding: 0.4rem 0.9rem;
-            cursor: pointer;
-            font-size: 0.82rem;
-            font-weight: 500;
-            transition: all 0.2s;
-            user-select: none;
-        }
-
-        .radio-pill:hover, .check-pill:hover { border-color: var(--forest); background: white; }
-
-        .radio-pill input, .check-pill input { display: none; }
-
-        .radio-pill.selected, .check-pill.selected {
-            background: var(--forest);
-            color: white;
-            border-color: var(--forest);
-        }
-
-        /* ── SELECT WRAPPER ── */
-        .select-wrap { position: relative; }
-
-        .select-wrap::after {
-            content: '▾';
-            position: absolute;
-            right: 0.85rem;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--muted);
-            pointer-events: none;
-            font-size: 0.85rem;
-        }
-
-        .select-wrap select { padding-right: 2rem; }
-
-        /* ── DECLARATION BOX ── */
-        .declaration {
-            background: linear-gradient(135deg, #f0faf4 0%, #e8f5ee 100%);
-            border: 1.5px solid #a7d7b8;
-            border-radius: var(--radius);
-            padding: 1.75rem;
-            text-align: center;
-        }
-
-        .declaration-arabic {
-            font-family: 'Amiri', serif;
-            font-size: 1.85rem;
-            color: var(--forest);
-            line-height: 1.8;
-            margin: 1rem 0;
-            direction: rtl;
-        }
-
-        .declaration-trans {
-            font-family: 'Noto Serif', serif;
-            font-style: italic;
-            color: var(--forest-mid);
-            font-size: 0.82rem;
-            line-height: 1.7;
-            border-top: 1px solid #a7d7b8;
-            padding-top: 0.75rem;
-            margin-top: 0.5rem;
-        }
-
-        .declaration-stmt {
-            font-size: 0.87rem;
-            color: #374151;
-            line-height: 1.7;
-            margin-bottom: 0.75rem;
-        }
-
-        .declaration-name {
-            font-weight: 700;
-            color: var(--forest);
-            border-bottom: 2px solid var(--forest);
-            padding: 0 0.5rem 2px;
-            min-width: 180px;
-            display: inline-block;
-        }
-
-        /* ── SIGNATURE ROW ── */
-        .sig-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 2rem;
-            margin-top: 1.5rem;
-        }
-
-        .sig-box {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 0.3rem;
-        }
-
-        .sig-line {
-            width: 100%;
-            height: 40px;
-            border-bottom: 2px solid var(--forest-mid);
-            display: flex;
-            align-items: flex-end;
-            justify-content: center;
-            font-size: 0.9rem;
-            font-weight: 600;
-            color: var(--forest);
-            padding-bottom: 4px;
-        }
-
-        .sig-label {
-            font-size: 0.65rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-            color: var(--muted);
-        }
-
-        /* ── OFFICE SECTION ── */
-        .office-section {
-            background: var(--forest);
-            color: white;
-            border-radius: var(--radius);
-            padding: 1.5rem;
-            display: flex;
-            gap: 1.5rem;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-
-        .office-fields { flex: 1; display: grid; grid-template-columns: auto 1fr; gap: 1rem; align-items: center; min-width: 200px; }
-
-        .reg-badge {
-            background: rgba(255,255,255,0.1);
-            border: 1.5px solid rgba(255,255,255,0.25);
-            border-radius: 10px;
-            padding: 0.5rem 1rem;
-        }
-
-        .reg-label { font-size: 0.6rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; opacity: 0.65; }
-        .reg-value { font-family: 'Courier New', monospace; font-size: 1.1rem; font-weight: 700; color: var(--gold-light); letter-spacing: 0.05em; }
-
-        .office-note-field {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 0.35rem;
-        }
-
-        .office-note-label { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase; opacity: 0.7; }
-
-        .office-note-input {
-            background: rgba(255,255,255,0.1);
-            border: 1.5px solid rgba(255,255,255,0.25);
-            border-radius: 8px;
-            padding: 0.55rem 0.85rem;
-            color: white;
-            font-family: 'DM Sans', sans-serif;
-            font-size: 0.9rem;
-            width: 100%;
-        }
-
-        .office-note-input::placeholder { opacity: 0.5; }
-        .office-note-input:focus { outline: none; border-color: var(--gold-light); }
-
-        .qr-wrap {
-            background: white;
-            border-radius: 10px;
-            padding: 0.6rem;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 0.3rem;
-        }
-
-        .qr-label { font-size: 0.58rem; font-weight: 700; text-transform: uppercase; color: var(--muted); letter-spacing: 0.06em; }
-
-        /* ── NAV BUTTONS ── */
-        .nav-row {
-            display: flex;
-            gap: 0.75rem;
-            margin-top: 2rem;
-            padding-top: 1.5rem;
-            border-top: 1px solid var(--border);
-        }
-
-        .btn {
-            font-family: 'DM Sans', sans-serif;
-            font-size: 0.82rem;
-            font-weight: 700;
-            letter-spacing: 0.06em;
-            text-transform: uppercase;
-            padding: 0.85rem 1.5rem;
-            border-radius: 8px;
-            border: none;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .btn-primary {
-            background: var(--forest);
-            color: white;
-            flex: 1;
-        }
-
-        .btn-primary:hover { background: var(--forest-mid); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(10,54,34,0.25); }
-        .btn-primary:disabled { opacity: 0.6; transform: none; cursor: not-allowed; }
-
-        .btn-secondary {
-            background: var(--cream);
-            color: var(--forest);
-            border: 1.5px solid var(--border);
-        }
-
-        .btn-secondary:hover { background: var(--parchment); border-color: var(--forest); }
-
-        .btn-print {
-            background: var(--ink);
-            color: white;
-            padding: 0.85rem 1.25rem;
-        }
-
-        .btn-print:hover { background: #333; }
-
-        /* ── DIVIDER ── */
-        .divider { height: 1px; background: var(--border); margin: 1.5rem 0; }
-
-        /* ── TOAST ── */
-        .toast {
-            position: fixed;
-            bottom: 2rem;
-            left: 50%;
-            transform: translateX(-50%) translateY(100px);
-            background: var(--forest);
-            color: white;
-            padding: 0.85rem 1.75rem;
-            border-radius: 8px;
-            font-size: 0.88rem;
-            font-weight: 600;
-            box-shadow: 0 8px 30px rgba(0,0,0,0.2);
-            transition: transform 0.4s cubic-bezier(.34,1.56,.64,1);
-            z-index: 1000;
-            white-space: nowrap;
-        }
-
-        .toast.show { transform: translateX(-50%) translateY(0); }
-
-        /* ── PRINT ── */
-        #print-sheet { display: none; }
-
-        @media print {
-            body { background: white !important; padding: 0 !important; margin: 0 !important; }
-            .wrapper, .header, .progress-wrap, .form-card, .toast { display: none !important; }
-            #print-sheet {
-                display: block !important;
-                font-family: 'DM Sans', sans-serif;
-                color: #1a1a1a;
-                font-size: 9pt;
-                width: 100%;
-            }
-
-            /* Print header */
-            .ps-header {
-                background: #0a3622 !important;
-                -webkit-print-color-adjust: exact;
-                print-color-adjust: exact;
-                color: white !important;
-                text-align: center;
-                padding: 14pt 20pt 10pt;
-            }
-            .ps-header .ps-arabic {
-                font-family: 'Amiri', serif;
-                font-size: 16pt;
-                color: #e8b96a !important;
-            }
-            .ps-header h1 {
-                font-family: 'Noto Serif', serif;
-                font-size: 12pt;
-                font-weight: 700;
-                letter-spacing: 0.1em;
-                text-transform: uppercase;
-                margin: 4pt 0 2pt;
-                color: white !important;
-            }
-            .ps-header p { font-size: 8pt; opacity: 0.85; color: white !important; }
-
-            /* Print body */
-            .ps-body { padding: 12pt 20pt; }
-
-            /* Photo + section 1 side by side */
-            .ps-top-row { display: flex; gap: 14pt; align-items: flex-start; margin-bottom: 10pt; }
-            .ps-photo-box {
-                width: 80pt;
-                height: 100pt;
-                border: 1.5pt solid #d6cdb8;
-                border-radius: 5pt;
-                overflow: hidden;
-                flex-shrink: 0;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                background: #faf7f2;
-            }
-            .ps-photo-box img { width: 100%; height: 100%; object-fit: cover; }
-            .ps-photo-box span { font-size: 7pt; color: #9ca3af; text-align: center; padding: 4pt; }
-
-            /* Section badge */
-            .ps-section {
-                display: flex;
-                align-items: center;
-                gap: 6pt;
-                margin-bottom: 6pt;
-                margin-top: 10pt;
-            }
-            .ps-badge {
-                background: #0a3622 !important;
-                -webkit-print-color-adjust: exact;
-                print-color-adjust: exact;
-                color: white !important;
-                font-size: 7pt;
-                font-weight: 700;
-                text-transform: uppercase;
-                letter-spacing: 0.06em;
-                padding: 2pt 8pt;
-                border-radius: 10pt;
-            }
-            .ps-line { flex: 1; height: 0.5pt; background: #d6cdb8; }
-
-            /* Fields grid */
-            .ps-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6pt; }
-            .ps-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 6pt; }
-            .ps-span2 { grid-column: span 2; }
-            .ps-span3 { grid-column: span 3; }
-            .ps-field { display: flex; flex-direction: column; gap: 1pt; }
-            .ps-label {
-                font-size: 6.5pt;
-                font-weight: 700;
-                text-transform: uppercase;
-                letter-spacing: 0.05em;
-                color: #6b7280;
-            }
-            .ps-value {
-                font-size: 9pt;
-                font-weight: 600;
-                color: #1a1a1a;
-                border-bottom: 1pt solid #d6cdb8;
-                padding-bottom: 2pt;
-                min-height: 14pt;
-            }
-            .ps-value.arabic {
-                font-family: 'Amiri', serif;
-                font-size: 11pt;
-                font-weight: 700;
-                color: #0a3622;
-            }
-
-            /* Declaration box */
-            .ps-declaration {
-                background: #f0faf4 !important;
-                -webkit-print-color-adjust: exact;
-                print-color-adjust: exact;
-                border: 1.5pt solid #a7d7b8;
-                border-radius: 6pt;
-                padding: 10pt 14pt;
-                text-align: center;
-                margin: 10pt 0;
-                page-break-inside: avoid;
-            }
-            .ps-decl-stmt { font-size: 8pt; color: #374151; line-height: 1.6; margin-bottom: 5pt; }
-            .ps-decl-name {
-                font-weight: 700;
-                color: #0a3622;
-                border-bottom: 1.5pt solid #0a3622;
-                padding: 0 4pt 1pt;
-                min-width: 100pt;
-                display: inline-block;
-            }
-            .ps-decl-arabic {
-                font-family: 'Amiri', serif;
-                font-size: 14pt;
-                color: #0a3622 !important;
-                direction: rtl;
-                line-height: 2;
-                margin: 4pt 0;
-            }
-            .ps-decl-trans {
-                font-family: 'Noto Serif', serif;
-                font-style: italic;
-                font-size: 7.5pt;
-                color: #155235;
-                border-top: 0.5pt solid #a7d7b8;
-                padding-top: 5pt;
-                margin-top: 3pt;
-                line-height: 1.6;
-            }
-
-            /* Signature row */
-            .ps-sig-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20pt; margin-top: 10pt; }
-            .ps-sig-box { display: flex; flex-direction: column; align-items: center; gap: 2pt; }
-            .ps-sig-line {
-                width: 100%;
-                height: 28pt;
-                border-bottom: 1.5pt solid #155235;
-                display: flex;
-                align-items: flex-end;
-                justify-content: center;
-                font-size: 8pt;
-                font-weight: 600;
-                color: #0a3622;
-                padding-bottom: 3pt;
-            }
-            .ps-sig-lbl { font-size: 6pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; color: #6b7280; }
-
-            /* Office bar */
-            .ps-office {
-                background: #0a3622 !important;
-                -webkit-print-color-adjust: exact;
-                print-color-adjust: exact;
-                color: white !important;
-                border-radius: 6pt;
-                padding: 10pt 14pt;
-                display: flex;
-                gap: 12pt;
-                align-items: center;
-                margin-top: 10pt;
-                page-break-inside: avoid;
-            }
-            .ps-reg-badge {
-                background: rgba(255,255,255,0.12) !important;
-                -webkit-print-color-adjust: exact;
-                print-color-adjust: exact;
-                border: 1pt solid rgba(255,255,255,0.25);
-                border-radius: 6pt;
-                padding: 5pt 10pt;
-                flex-shrink: 0;
-            }
-            .ps-reg-lbl { font-size: 6pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; opacity: 0.65; color: white !important; }
-            .ps-reg-val { font-family: 'Courier New', monospace; font-size: 11pt; font-weight: 700; color: #e8b96a !important; letter-spacing: 0.05em; }
-            .ps-office-note { flex: 1; }
-            .ps-note-lbl { font-size: 6pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; opacity: 0.65; color: white !important; margin-bottom: 3pt; }
-            .ps-note-val {
-                font-size: 8.5pt;
-                color: white !important;
-                border-bottom: 1pt solid rgba(255,255,255,0.3);
-                min-height: 16pt;
-                padding-bottom: 2pt;
-            }
-            .ps-qr-box {
-                background: white !important;
-                -webkit-print-color-adjust: exact;
-                print-color-adjust: exact;
-                border-radius: 5pt;
-                padding: 4pt;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                gap: 2pt;
-            }
-            .ps-qr-box canvas, .ps-qr-box img { width: 60pt !important; height: 60pt !important; }
-            .ps-qr-lbl { font-size: 5.5pt; font-weight: 700; text-transform: uppercase; color: #6b7280; letter-spacing: 0.05em; }
-
-            .ps-divider { height: 0.5pt; background: #d6cdb8; margin: 8pt 0; }
-
-            /* Reason textarea */
-            .ps-reason {
-                font-size: 8.5pt;
-                color: #1a1a1a;
-                border: 1pt solid #d6cdb8;
-                border-radius: 4pt;
-                padding: 5pt 7pt;
-                min-height: 40pt;
-                line-height: 1.5;
-                width: 100%;
-                box-sizing: border-box;
-            }
-        }
-
-        /* ── SUMMARY (page 4) ── */
-        .summary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; }
-        .summary-item { background: var(--cream); border-radius: 8px; padding: 0.6rem 0.9rem; }
-        .summary-key { font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); }
-        .summary-val { font-size: 0.9rem; font-weight: 600; color: var(--ink); margin-top: 0.15rem; }
-
-        /* ── WITNESS CARD ── */
-        .witness-card {
-            background: linear-gradient(135deg, #f8fffe 0%, #f0faf5 100%);
-            border: 1.5px solid #b8dfc8;
-            border-radius: var(--radius);
-            padding: 1.25rem 1.5rem 1rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .witness-header {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            margin-bottom: 1rem;
-        }
-
-        .witness-num {
-            font-size: 0.7rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-            color: var(--forest);
-            white-space: nowrap;
-        }
-
-        .witness-line {
-            flex: 1;
-            height: 1px;
-            background: #b8dfc8;
-        }
-
-        .witness-confirm {
-            padding-top: 0.5rem;
-        }
-
-        .witness-confirm .check-pill.selected {
-            background: var(--forest);
-            color: white;
-            border-color: var(--forest);
-        }
-
-        /* ── PRINT: WITNESS SECTION ── */
-        @media print {
-            .ps-witness-grid {
-                display: grid;
-                grid-template-columns: 1fr 1fr;
-                gap: 10pt;
-                margin-top: 6pt;
-            }
-            .ps-witness-card {
-                background: #f8fffe !important;
-                -webkit-print-color-adjust: exact;
-                print-color-adjust: exact;
-                border: 1pt solid #b8dfc8;
-                border-radius: 5pt;
-                padding: 8pt 10pt;
-                page-break-inside: avoid;
-            }
-            .ps-witness-num {
-                font-size: 7pt;
-                font-weight: 800;
-                text-transform: uppercase;
-                letter-spacing: 0.07em;
-                color: #0a3622;
-                border-bottom: 0.5pt solid #b8dfc8;
-                padding-bottom: 4pt;
-                margin-bottom: 6pt;
-            }
-            .ps-witness-sig {
-                margin-top: 8pt;
-                border-top: 1pt solid #b8dfc8;
-                padding-top: 5pt;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                gap: 2pt;
-            }
-            .ps-witness-sig-line {
-                width: 100%;
-                height: 22pt;
-                border-bottom: 1pt solid #155235;
-            }
-            .ps-witness-sig-lbl {
-                font-size: 5.5pt;
-                font-weight: 700;
-                text-transform: uppercase;
-                letter-spacing: 0.06em;
-                color: #6b7280;
-            }
-        }
-
-        /* ── SUMMARY (page 5) ── */
-        .summary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; }
-        .summary-item { background: var(--cream); border-radius: 8px; padding: 0.6rem 0.9rem; }
-        .summary-key { font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); }
-        .summary-val { font-size: 0.9rem; font-weight: 600; color: var(--ink); margin-top: 0.15rem; }
-
-        @media (max-width: 480px) {
-            .summary-grid { grid-template-columns: 1fr; }
-            .office-section { flex-direction: column; }
-            .sig-row { grid-template-columns: 1fr; }
-            .ps-witness-grid { grid-template-columns: 1fr !important; }
-        }
-    </style></head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fomu Rasmi ya Kusilimu – Masjid Taqwa</title>
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Noto+Serif:wght@400;700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ─────────────────────────────────────────────
+   RESET & VARIABLES
+───────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --forest:       #0a3622;
+  --forest-mid:   #155235;
+  --forest-light: #1a6b42;
+  --gold:         #c9933a;
+  --gold-light:   #e8b96a;
+  --cream:        #faf7f2;
+  --parchment:    #f2ead8;
+  --ink:          #1a1a1a;
+  --muted:        #6b7280;
+  --border:       #d6cdb8;
+  --error:        #b91c1c;
+  --shadow:       0 4px 24px rgba(10,54,34,.10);
+  --radius:       12px;
+}
+
+/* ─────────────────────────────────────────────
+   BASE
+───────────────────────────────────────────── */
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--parchment);
+  background-image:
+    radial-gradient(ellipse at 20% 10%, rgba(10,54,34,.06) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 90%, rgba(201,147,58,.07) 0%, transparent 50%);
+  min-height: 100vh;
+  padding: 2rem 1rem;
+  color: var(--ink);
+}
+
+.wrapper { max-width: 860px; margin: 0 auto; }
+
+/* ─────────────────────────────────────────────
+   HEADER
+───────────────────────────────────────────── */
+.header {
+  background: linear-gradient(160deg, var(--forest) 0%, var(--forest-mid) 60%, var(--forest-light) 100%);
+  color: white;
+  border-radius: var(--radius) var(--radius) 0 0;
+  padding: 2.5rem 2rem 2rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.header::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  pointer-events: none;
+}
+.header-ornament { font-family:'Amiri',serif; font-size:2.2rem; color:var(--gold-light); letter-spacing:.05em; margin-bottom:.5rem; text-shadow:0 2px 8px rgba(0,0,0,.3); }
+.header h1 { font-family:'Noto Serif',serif; font-size:1.45rem; font-weight:700; letter-spacing:.12em; text-transform:uppercase; margin-bottom:.4rem; }
+.header-sub  { font-size:.8rem; opacity:.85; letter-spacing:.08em; }
+.header-phone { font-size:.72rem; opacity:.65; margin-top:.2rem; }
+.gold-line { width:60px; height:2px; background:linear-gradient(90deg,transparent,var(--gold-light),transparent); margin:.9rem auto; }
+
+/* ─────────────────────────────────────────────
+   PROGRESS BAR
+───────────────────────────────────────────── */
+.progress-wrap {
+  background:white; padding:1rem 2rem; border-bottom:1px solid var(--border);
+  display:flex; gap:0;
+}
+.step {
+  flex:1; display:flex; flex-direction:column; align-items:center; gap:.3rem;
+  position:relative; cursor:pointer;
+}
+.step::after {
+  content:''; position:absolute; top:15px; left:50%; width:100%; height:2px;
+  background:var(--border); z-index:0;
+}
+.step:last-child::after { display:none; }
+.step-dot {
+  width:30px; height:30px; border-radius:50%; background:var(--border); color:var(--muted);
+  font-size:.75rem; font-weight:700; display:flex; align-items:center; justify-content:center;
+  position:relative; z-index:1; transition:all .3s;
+}
+.step.active .step-dot { background:var(--forest); color:white; box-shadow:0 0 0 4px rgba(10,54,34,.15); }
+.step.done  .step-dot  { background:var(--gold); color:white; }
+.step.done::after, .step.active::after { background:var(--forest); }
+.step-label { font-size:.65rem; font-weight:600; color:var(--muted); text-transform:uppercase; letter-spacing:.04em; text-align:center; }
+.step.active .step-label { color:var(--forest); }
+
+/* ─────────────────────────────────────────────
+   FORM CARD & PAGES
+───────────────────────────────────────────── */
+.form-card { background:white; border-radius:0 0 var(--radius) var(--radius); box-shadow:var(--shadow); overflow:hidden; }
+
+.page { display:none; padding:2rem; animation:fadeIn .3s ease; }
+.page.active { display:block; }
+
+@keyframes fadeIn {
+  from { opacity:0; transform:translateY(8px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+
+/* ─────────────────────────────────────────────
+   SECTION TITLES
+───────────────────────────────────────────── */
+.section-title { display:flex; align-items:center; gap:.75rem; margin-bottom:1.5rem; }
+.section-badge { background:var(--forest); color:white; font-size:.65rem; font-weight:700; letter-spacing:.08em; text-transform:uppercase; padding:.35rem .85rem; border-radius:20px; }
+.section-line  { flex:1; height:1px; background:var(--border); }
+
+/* ─────────────────────────────────────────────
+   GRID HELPERS
+───────────────────────────────────────────── */
+.grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:1.25rem; }
+.grid-3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:1.25rem; }
+.span-2 { grid-column:span 2; }
+.span-3 { grid-column:span 3; }
+
+@media (max-width:640px) {
+  .grid-2, .grid-3 { grid-template-columns:1fr; }
+  .span-2, .span-3 { grid-column:span 1; }
+  .progress-wrap { padding:.75rem 1rem; }
+  .page { padding:1.25rem; }
+  .step-label { display:none; }
+  .sig-row { grid-template-columns:1fr; }
+}
+
+/* ─────────────────────────────────────────────
+   FORM FIELDS
+───────────────────────────────────────────── */
+.field { display:flex; flex-direction:column; gap:.4rem; }
+.field label, .field-label { font-size:.68rem; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:.06em; }
+
+.field input[type="text"],
+.field input[type="tel"],
+.field input[type="date"],
+.field select,
+.field textarea {
+  font-family:'DM Sans',sans-serif; font-size:.9rem; color:var(--ink);
+  background:var(--cream); border:1.5px solid var(--border); border-radius:8px;
+  padding:.6rem .85rem; transition:border-color .2s, box-shadow .2s;
+  width:100%; appearance:none; -webkit-appearance:none;
+}
+.field input:focus, .field select:focus, .field textarea:focus {
+  outline:none; border-color:var(--forest); box-shadow:0 0 0 3px rgba(10,54,34,.08); background:white;
+}
+.field input.error, .field select.error { border-color:var(--error); }
+.field textarea { resize:vertical; min-height:80px; }
+
+/* ─────────────────────────────────────────────
+   PHOTO UPLOAD
+───────────────────────────────────────────── */
+.photo-wrap {
+  width:120px; height:150px; border:2px dashed var(--border); border-radius:10px;
+  display:flex; align-items:center; justify-content:center; cursor:pointer;
+  position:relative; overflow:hidden; background:var(--cream); transition:border-color .2s; flex-shrink:0;
+}
+.photo-wrap:hover { border-color:var(--forest); }
+.photo-wrap input { position:absolute; inset:0; opacity:0; cursor:pointer; z-index:2; }
+.photo-wrap img { width:100%; height:100%; object-fit:cover; display:none; }
+.photo-placeholder { display:flex; flex-direction:column; align-items:center; gap:.4rem; color:var(--forest); font-size:.62rem; font-weight:700; text-transform:uppercase; letter-spacing:.05em; text-align:center; padding:.5rem; }
+.photo-icon { font-size:1.8rem; opacity:.5; }
+
+/* ─────────────────────────────────────────────
+   RADIO / CHECKBOX PILLS
+───────────────────────────────────────────── */
+.radio-group, .check-group { display:flex; flex-wrap:wrap; gap:.6rem; padding-top:.2rem; }
+
+.radio-pill, .check-pill {
+  display:flex; align-items:center; gap:.4rem; background:var(--cream);
+  border:1.5px solid var(--border); border-radius:20px; padding:.4rem .9rem;
+  cursor:pointer; font-size:.82rem; font-weight:500; transition:all .2s; user-select:none;
+}
+.radio-pill:hover, .check-pill:hover { border-color:var(--forest); background:white; }
+.radio-pill input, .check-pill input { display:none; }
+.radio-pill.selected, .check-pill.selected { background:var(--forest); color:white; border-color:var(--forest); }
+
+/* ─────────────────────────────────────────────
+   SELECT WRAPPER
+───────────────────────────────────────────── */
+.select-wrap { position:relative; }
+.select-wrap::after { content:'▾'; position:absolute; right:.85rem; top:50%; transform:translateY(-50%); color:var(--muted); pointer-events:none; font-size:.85rem; }
+.select-wrap select { padding-right:2rem; }
+
+/* ─────────────────────────────────────────────
+   DECLARATION BOX
+───────────────────────────────────────────── */
+.declaration { background:linear-gradient(135deg,#f0faf4 0%,#e8f5ee 100%); border:1.5px solid #a7d7b8; border-radius:var(--radius); padding:1.75rem; text-align:center; }
+.declaration-arabic { font-family:'Amiri',serif; font-size:1.85rem; color:var(--forest); line-height:1.8; margin:1rem 0; direction:rtl; }
+.declaration-trans  { font-family:'Noto Serif',serif; font-style:italic; color:var(--forest-mid); font-size:.82rem; line-height:1.7; border-top:1px solid #a7d7b8; padding-top:.75rem; margin-top:.5rem; }
+.declaration-stmt   { font-size:.87rem; color:#374151; line-height:1.7; margin-bottom:.75rem; }
+.declaration-name   { font-weight:700; color:var(--forest); border-bottom:2px solid var(--forest); padding:0 .5rem 2px; min-width:180px; display:inline-block; }
+
+/* ─────────────────────────────────────────────
+   SIGNATURE ROW
+───────────────────────────────────────────── */
+.sig-row { display:grid; grid-template-columns:1fr 1fr; gap:2rem; margin-top:1.5rem; }
+.sig-box { display:flex; flex-direction:column; align-items:center; gap:.3rem; }
+.sig-line { width:100%; height:40px; border-bottom:2px solid var(--forest-mid); display:flex; align-items:flex-end; justify-content:center; font-size:.9rem; font-weight:600; color:var(--forest); padding-bottom:4px; }
+.sig-label { font-size:.65rem; font-weight:700; text-transform:uppercase; letter-spacing:.08em; color:var(--muted); }
+
+/* ─────────────────────────────────────────────
+   OFFICE SECTION
+───────────────────────────────────────────── */
+.office-section { background:var(--forest); color:white; border-radius:var(--radius); padding:1.5rem; display:flex; gap:1.5rem; align-items:center; flex-wrap:wrap; }
+.reg-badge { background:rgba(255,255,255,.1); border:1.5px solid rgba(255,255,255,.25); border-radius:10px; padding:.5rem 1rem; flex-shrink:0; }
+.reg-label { font-size:.6rem; font-weight:700; letter-spacing:.08em; text-transform:uppercase; opacity:.65; }
+.reg-value { font-family:'Courier New',monospace; font-size:1.1rem; font-weight:700; color:var(--gold-light); letter-spacing:.05em; }
+.office-note-field { flex:1; display:flex; flex-direction:column; gap:.35rem; min-width:180px; }
+.office-note-label { font-size:.65rem; font-weight:700; letter-spacing:.07em; text-transform:uppercase; opacity:.7; }
+.office-note-input { background:rgba(255,255,255,.1); border:1.5px solid rgba(255,255,255,.25); border-radius:8px; padding:.55rem .85rem; color:white; font-family:'DM Sans',sans-serif; font-size:.9rem; width:100%; }
+.office-note-input::placeholder { opacity:.5; }
+.office-note-input:focus { outline:none; border-color:var(--gold-light); }
+.qr-wrap { background:white; border-radius:10px; padding:.6rem; display:flex; flex-direction:column; align-items:center; gap:.3rem; }
+.qr-label { font-size:.58rem; font-weight:700; text-transform:uppercase; color:var(--muted); letter-spacing:.06em; }
+
+/* ─────────────────────────────────────────────
+   NAV BUTTONS
+───────────────────────────────────────────── */
+.nav-row { display:flex; gap:.75rem; margin-top:2rem; padding-top:1.5rem; border-top:1px solid var(--border); }
+.btn { font-family:'DM Sans',sans-serif; font-size:.82rem; font-weight:700; letter-spacing:.06em; text-transform:uppercase; padding:.85rem 1.5rem; border-radius:8px; border:none; cursor:pointer; transition:all .2s; }
+.btn-primary   { background:var(--forest); color:white; flex:1; }
+.btn-primary:hover    { background:var(--forest-mid); transform:translateY(-1px); box-shadow:0 4px 12px rgba(10,54,34,.25); }
+.btn-primary:disabled { opacity:.6; transform:none; cursor:not-allowed; }
+.btn-secondary { background:var(--cream); color:var(--forest); border:1.5px solid var(--border); }
+.btn-secondary:hover  { background:var(--parchment); border-color:var(--forest); }
+.btn-print     { background:var(--ink); color:white; padding:.85rem 1.25rem; }
+.btn-print:hover { background:#333; }
+
+/* ─────────────────────────────────────────────
+   DIVIDER & TOAST
+───────────────────────────────────────────── */
+.divider { height:1px; background:var(--border); margin:1.5rem 0; }
+
+.toast {
+  position:fixed; bottom:2rem; left:50%;
+  transform:translateX(-50%) translateY(100px);
+  background:var(--forest); color:white;
+  padding:.85rem 1.75rem; border-radius:8px;
+  font-size:.88rem; font-weight:600;
+  box-shadow:0 8px 30px rgba(0,0,0,.2);
+  transition:transform .4s cubic-bezier(.34,1.56,.64,1);
+  z-index:1000; white-space:nowrap;
+}
+.toast.show { transform:translateX(-50%) translateY(0); }
+
+/* ─────────────────────────────────────────────
+   SUMMARY (page 5)
+───────────────────────────────────────────── */
+.summary-grid { display:grid; grid-template-columns:1fr 1fr; gap:.6rem; margin-bottom:1.5rem; }
+.summary-item { background:var(--cream); border-radius:8px; padding:.6rem .9rem; }
+.summary-key  { font-size:.65rem; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:var(--muted); }
+.summary-val  { font-size:.9rem; font-weight:600; color:var(--ink); margin-top:.15rem; }
+
+@media (max-width:480px) {
+  .summary-grid { grid-template-columns:1fr; }
+  .office-section { flex-direction:column; }
+}
+
+/* ─────────────────────────────────────────────
+   WITNESS CARDS
+───────────────────────────────────────────── */
+.witness-card { background:linear-gradient(135deg,#f8fffe 0%,#f0faf5 100%); border:1.5px solid #b8dfc8; border-radius:var(--radius); padding:1.25rem 1.5rem 1rem; margin-bottom:.5rem; }
+.witness-header { display:flex; align-items:center; gap:.75rem; margin-bottom:1rem; }
+.witness-num { font-size:.7rem; font-weight:800; text-transform:uppercase; letter-spacing:.08em; color:var(--forest); white-space:nowrap; }
+.witness-line { flex:1; height:1px; background:#b8dfc8; }
+.witness-confirm { padding-top:.5rem; }
+
+/* ─────────────────────────────────────────────
+   PRINT — hide screen elements
+───────────────────────────────────────────── */
+#print-sheet { display:none; }
+
+@media print {
+  @page { margin: 12mm 14mm; size: A4 portrait; }
+
+  body { background:white !important; padding:0 !important; margin:0 !important; }
+  .wrapper, .toast { display:none !important; }
+
+  /* ── print sheet visible ── */
+  #print-sheet {
+    display:block !important;
+    font-family:'DM Sans',sans-serif;
+    color:#1a1a1a;
+    font-size:9pt;
+    width:100%;
+  }
+
+  /* ── header ── */
+  .ps-header {
+    background:#0a3622 !important;
+    -webkit-print-color-adjust:exact;
+    print-color-adjust:exact;
+    color:white !important;
+    text-align:center;
+    padding:12pt 20pt 10pt;
+  }
+  .ps-header .ps-arabic { font-family:'Amiri',serif; font-size:16pt; color:#e8b96a !important; display:block; margin-bottom:4pt; }
+  .ps-header h1 { font-family:'Noto Serif',serif; font-size:12pt; font-weight:700; letter-spacing:.1em; text-transform:uppercase; margin:4pt 0 2pt; color:white !important; }
+  .ps-header p  { font-size:7.5pt; opacity:.85; color:white !important; }
+
+  /* ── body wrapper ── */
+  .ps-body { padding:10pt 0; }
+
+  /* ── section badges ── */
+  .ps-section { display:flex; align-items:center; gap:6pt; margin:10pt 0 6pt; }
+  .ps-badge {
+    background:#0a3622 !important;
+    -webkit-print-color-adjust:exact;
+    print-color-adjust:exact;
+    color:white !important;
+    font-size:6.5pt; font-weight:700; text-transform:uppercase; letter-spacing:.06em;
+    padding:2pt 8pt; border-radius:10pt; white-space:nowrap;
+  }
+  .ps-line { flex:1; height:.5pt; background:#d6cdb8; }
+
+  /* ── field primitives ── */
+  .ps-field { display:flex; flex-direction:column; gap:1pt; }
+  .ps-label { font-size:6pt; font-weight:700; text-transform:uppercase; letter-spacing:.05em; color:#6b7280; }
+  .ps-value { font-size:9pt; font-weight:600; color:#1a1a1a; border-bottom:.75pt solid #d6cdb8; padding-bottom:2pt; min-height:14pt; }
+
+  /* ── grids ── */
+  .ps-grid-3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:6pt; }
+  .ps-grid-2 { display:grid; grid-template-columns:1fr 1fr;     gap:6pt; }
+  .ps-col-span2 { grid-column:span 2; }
+  .ps-col-span3 { grid-column:span 3; }
+
+  /* ── top row (photo + fields) ── */
+  .ps-top-row { display:flex; gap:12pt; align-items:flex-start; margin-bottom:8pt; }
+  .ps-photo-box {
+    width:75pt; height:95pt; flex-shrink:0;
+    border:1.5pt solid #d6cdb8; border-radius:5pt; overflow:hidden;
+    display:flex; align-items:center; justify-content:center; background:#faf7f2;
+  }
+  .ps-photo-box img { width:100%; height:100%; object-fit:cover; }
+  .ps-photo-box span { font-size:7pt; color:#9ca3af; text-align:center; padding:4pt; }
+  .ps-top-fields { flex:1; }
+
+  /* ── declaration box ── */
+  .ps-declaration {
+    background:#f0faf4 !important;
+    -webkit-print-color-adjust:exact;
+    print-color-adjust:exact;
+    border:1.5pt solid #a7d7b8; border-radius:6pt;
+    padding:10pt 14pt; text-align:center;
+    margin:10pt 0; page-break-inside:avoid;
+  }
+  .ps-decl-stmt   { font-size:8pt; color:#374151; line-height:1.6; margin-bottom:5pt; }
+  .ps-decl-name   { font-weight:700; color:#0a3622; border-bottom:1.5pt solid #0a3622; padding:0 4pt 1pt; min-width:100pt; display:inline-block; }
+  .ps-decl-arabic { font-family:'Amiri',serif; font-size:14pt; color:#0a3622 !important; direction:rtl; line-height:2; margin:4pt 0; display:block; }
+  .ps-decl-trans  { font-family:'Noto Serif',serif; font-style:italic; font-size:7.5pt; color:#155235; border-top:.5pt solid #a7d7b8; padding-top:5pt; margin-top:3pt; line-height:1.6; }
+
+  /* ── signature row ── */
+  .ps-sig-row { display:grid; grid-template-columns:1fr 1fr; gap:20pt; margin-top:10pt; }
+  .ps-sig-box { display:flex; flex-direction:column; align-items:center; gap:2pt; }
+  .ps-sig-line { width:100%; height:26pt; border-bottom:1.5pt solid #155235; display:flex; align-items:flex-end; justify-content:center; font-size:8pt; font-weight:600; color:#0a3622; padding-bottom:3pt; }
+  .ps-sig-lbl  { font-size:6pt; font-weight:700; text-transform:uppercase; letter-spacing:.07em; color:#6b7280; }
+
+  /* ── witness cards ── */
+  .ps-witness-grid { display:grid; grid-template-columns:1fr 1fr; gap:8pt; margin-top:4pt; }
+  .ps-witness-card {
+    background:#f8fffe !important;
+    -webkit-print-color-adjust:exact;
+    print-color-adjust:exact;
+    border:1pt solid #b8dfc8; border-radius:5pt;
+    padding:7pt 9pt; page-break-inside:avoid;
+  }
+  .ps-witness-num { font-size:7pt; font-weight:800; text-transform:uppercase; letter-spacing:.07em; color:#0a3622; border-bottom:.5pt solid #b8dfc8; padding-bottom:4pt; margin-bottom:6pt; }
+  .ps-witness-sig { margin-top:8pt; border-top:1pt solid #b8dfc8; padding-top:5pt; display:flex; flex-direction:column; align-items:center; gap:2pt; }
+  .ps-witness-sig-line { width:100%; height:20pt; border-bottom:1pt solid #155235; }
+  .ps-witness-sig-lbl  { font-size:5.5pt; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:#6b7280; }
+
+  /* ── reason textarea ── */
+  .ps-reason { font-size:8.5pt; color:#1a1a1a; border:1pt solid #d6cdb8; border-radius:4pt; padding:5pt 7pt; min-height:38pt; line-height:1.5; width:100%; box-sizing:border-box; }
+
+  /* ── office bar ── */
+  .ps-office {
+    background:#0a3622 !important;
+    -webkit-print-color-adjust:exact;
+    print-color-adjust:exact;
+    color:white !important;
+    border-radius:6pt; padding:10pt 14pt;
+    display:flex; gap:12pt; align-items:center;
+    margin-top:10pt; page-break-inside:avoid;
+  }
+  .ps-reg-badge {
+    background:rgba(255,255,255,.12) !important;
+    -webkit-print-color-adjust:exact;
+    print-color-adjust:exact;
+    border:1pt solid rgba(255,255,255,.25);
+    border-radius:6pt; padding:5pt 10pt; flex-shrink:0;
+  }
+  .ps-reg-lbl { font-size:6pt; font-weight:700; text-transform:uppercase; letter-spacing:.07em; opacity:.65; color:white !important; }
+  .ps-reg-val { font-family:'Courier New',monospace; font-size:11pt; font-weight:700; color:#e8b96a !important; letter-spacing:.05em; }
+  .ps-office-note { flex:1; }
+  .ps-note-lbl { font-size:6pt; font-weight:700; text-transform:uppercase; letter-spacing:.07em; opacity:.65; color:white !important; margin-bottom:3pt; }
+  .ps-note-val { font-size:8.5pt; color:white !important; border-bottom:1pt solid rgba(255,255,255,.3); min-height:14pt; padding-bottom:2pt; }
+  .ps-qr-box  { background:white !important; -webkit-print-color-adjust:exact; print-color-adjust:exact; border-radius:5pt; padding:5pt; display:flex; flex-direction:column; align-items:center; gap:3pt; }
+  .ps-qr-box canvas, .ps-qr-box img { width:60pt !important; height:60pt !important; }
+  .ps-qr-lbl  { font-size:5.5pt; font-weight:700; text-transform:uppercase; color:#6b7280; letter-spacing:.05em; text-align:center; }
+
+  .ps-divider { height:.5pt; background:#d6cdb8; margin:7pt 0; }
+}
+</style>
+</head>
 <body>
 
 <div class="wrapper">
 
-    <!-- HEADER -->
-    <div class="header">
-        <div class="header-ornament">بِسْمِ اللهِ الرَّحْمَنِ الرَّحِيمِ</div>
-        <div class="gold-line"></div>
-        <h1>Fomu Rasmi ya Kusilimu</h1>
-        <div class="header-sub">Masjid Taqwa · Kibaha, Mailimoja</div>
-        <div class="header-phone">📞 +255 713 813 787</div>
+  <!-- ═══════════════════════════════════════════════
+       HEADER
+  ════════════════════════════════════════════════ -->
+  <div class="header">
+    <div class="header-ornament">بِسْمِ اللهِ الرَّحْمَنِ الرَّحِيمِ</div>
+    <div class="gold-line"></div>
+    <h1>Fomu Rasmi ya Kusilimu</h1>
+    <div class="header-sub">Masjid Taqwa · Kibaha, Mailimoja</div>
+    <div class="header-phone">📞 +255 713 813 787</div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       PROGRESS BAR
+  ════════════════════════════════════════════════ -->
+  <div class="progress-wrap">
+    <div class="step active" id="step-1" onclick="goToStep(1)">
+      <div class="step-dot">1</div>
+      <div class="step-label">Taarifa</div>
     </div>
-
-    <!-- PROGRESS -->
-    <div class="progress-wrap no-print">
-        <div class="step active" id="step-1" onclick="goToStep(1)">
-            <div class="step-dot">1</div>
-            <div class="step-label">Taarifa</div>
-        </div>
-        <div class="step" id="step-2" onclick="goToStep(2)">
-            <div class="step-dot">2</div>
-            <div class="step-label">Mawasiliano</div>
-        </div>
-        <div class="step" id="step-3" onclick="goToStep(3)">
-            <div class="step-dot">3</div>
-            <div class="step-label">Kidini</div>
-        </div>
-        <div class="step" id="step-4" onclick="goToStep(4)">
-            <div class="step-dot">4</div>
-            <div class="step-label">Ushahidi</div>
-        </div>
-        <div class="step" id="step-5" onclick="goToStep(5)">
-            <div class="step-dot">5</div>
-            <div class="step-label">Uthibitisho</div>
-        </div>
+    <div class="step" id="step-2" onclick="goToStep(2)">
+      <div class="step-dot">2</div>
+      <div class="step-label">Mawasiliano</div>
     </div>
+    <div class="step" id="step-3" onclick="goToStep(3)">
+      <div class="step-dot">3</div>
+      <div class="step-label">Kidini</div>
+    </div>
+    <div class="step" id="step-4" onclick="goToStep(4)">
+      <div class="step-dot">4</div>
+      <div class="step-label">Ushahidi</div>
+    </div>
+    <div class="step" id="step-5" onclick="goToStep(5)">
+      <div class="step-dot">5</div>
+      <div class="step-label">Uthibitisho</div>
+    </div>
+  </div>
 
-    <!-- FORM CARD -->
-    <div class="form-card">
+  <!-- ═══════════════════════════════════════════════
+       FORM CARD
+  ════════════════════════════════════════════════ -->
+  <div class="form-card">
 
-        <!-- PAGE 1: Taarifa Binafsi -->
-        <div class="page active" id="page-1">
-            <div class="section-title">
-                <span class="section-badge">1. Taarifa Binafsi</span>
-                <div class="section-line"></div>
+    <!-- ──────────────────────────────────────────
+         PAGE 1 · Taarifa Binafsi
+    ─────────────────────────────────────────── -->
+    <div class="page active" id="page-1">
+      <div class="section-title">
+        <span class="section-badge">1. Taarifa Binafsi</span>
+        <div class="section-line"></div>
+      </div>
+
+      <div style="display:flex; gap:1.5rem; align-items:flex-start; flex-wrap:wrap;">
+        <div style="flex:1; min-width:200px;">
+          <div class="grid-2">
+            <div class="field span-2">
+              <label>Jina Kamili *</label>
+              <input type="text" id="fullName" placeholder="Andika jina lako kamili" oninput="syncName()" style="text-transform:uppercase; font-weight:600;">
             </div>
-
-            <div style="display:flex; gap:1.5rem; align-items:flex-start; flex-wrap:wrap;">
-                <div style="flex:1; min-width:200px;">
-                    <div class="grid-2" style="gap:1.25rem;">
-                        <div class="field span-2">
-                            <label>Jina Kamili *</label>
-                            <input type="text" id="fullName" placeholder="Andika jina lako kamili" oninput="syncName()" style="text-transform:uppercase; font-weight:600;">
-                        </div>
-                        <div class="field">
-                            <label>Tarehe ya Kuzaliwa</label>
-                            <input type="date" id="dob">
-                        </div>
-                        <div class="field">
-                            <label>Uraia</label>
-                            <div class="select-wrap">
-                                <select id="citizenship" onchange="updatePhoneCodes()">
-                                    <option value="Tanzania">Tanzania</option>
-                                    <option value="Kenya">Kenya</option>
-                                    <option value="Uganda">Uganda</option>
-                                    <option value="Rwanda">Rwanda</option>
-                                    <option value="Burundi">Burundi</option>
-                                    <option value="Nchi Nyingine">Nchi Nyingine</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="field">
-                            <label>Jinsia *</label>
-                            <div class="radio-group" id="genderGroup">
-                                <label class="radio-pill" onclick="selectRadio(this, 'gender', 'Mwanaume')">
-                                    <input type="radio" name="gender" value="Mwanaume"> Mwanaume
-                                </label>
-                                <label class="radio-pill" onclick="selectRadio(this, 'gender', 'Mwanamke')">
-                                    <input type="radio" name="gender" value="Mwanamke"> Mwanamke
-                                </label>
-                            </div>
-                        </div>
-                        <div class="field">
-                            <label>Hali ya Ndoa</label>
-                            <div class="select-wrap">
-                                <select id="maritalStatus">
-                                    <option value="">Chagua Jinsia Kwanza</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Photo upload -->
-                <div>
-                    <div class="field-label" style="margin-bottom:0.4rem;">Picha</div>
-                    <div class="photo-wrap" id="photoWrap">
-                        <input type="file" id="photoFile" accept="image/*">
-                        <img id="photoPreview" alt="Picha">
-                        <div class="photo-placeholder" id="photoTxt">
-                            <span class="photo-icon">📷</span>
-                            <span>Pakia Picha</span>
-                        </div>
-                    </div>
-                </div>
+            <div class="field">
+              <label>Tarehe ya Kuzaliwa</label>
+              <input type="date" id="dob">
             </div>
-
-            <div class="nav-row no-print">
-                <div style="flex:1"></div>
-                <button class="btn btn-primary" onclick="nextStep(1)">Endelea →</button>
+            <div class="field">
+              <label>Uraia</label>
+              <div class="select-wrap">
+                <select id="citizenship" onchange="updatePhoneCodes()">
+                  <option value="Tanzania">Tanzania</option>
+                  <option value="Kenya">Kenya</option>
+                  <option value="Uganda">Uganda</option>
+                  <option value="Rwanda">Rwanda</option>
+                  <option value="Burundi">Burundi</option>
+                  <option value="Nchi Nyingine">Nchi Nyingine</option>
+                </select>
+              </div>
             </div>
+            <div class="field">
+              <label>Jinsia *</label>
+              <div class="radio-group" id="genderGroup">
+                <label class="radio-pill" onclick="selectGender(this, 'Mwanaume')">
+                  <input type="radio" name="gender" value="Mwanaume"> Mwanaume
+                </label>
+                <label class="radio-pill" onclick="selectGender(this, 'Mwanamke')">
+                  <input type="radio" name="gender" value="Mwanamke"> Mwanamke
+                </label>
+              </div>
+            </div>
+            <div class="field">
+              <label>Hali ya Ndoa</label>
+              <div class="select-wrap">
+                <select id="maritalStatus">
+                  <option value="">Chagua Jinsia Kwanza</option>
+                </select>
+              </div>
+            </div>
+          </div>
         </div>
 
-        <!-- PAGE 2: Mawasiliano & Kitambulisho -->
-        <div class="page" id="page-2">
-            <div class="section-title">
-                <span class="section-badge">2. Mawasiliano & Kitambulisho</span>
-                <div class="section-line"></div>
+        <!-- Photo upload -->
+        <div>
+          <div class="field-label" style="margin-bottom:.4rem;">Picha</div>
+          <div class="photo-wrap">
+            <input type="file" id="photoFile" accept="image/*">
+            <img id="photoPreview" alt="Picha">
+            <div class="photo-placeholder" id="photoTxt">
+              <span class="photo-icon">📷</span>
+              <span>Pakia Picha</span>
             </div>
+          </div>
+        </div>
+      </div>
 
-            <div class="grid-2">
-                <div class="field">
-                    <label>Namba ya Simu *</label>
-                    <input type="tel" id="phone" value="+255" oninput="this.value = this.value.replace(/[^0-9+]/g, '')">
-                </div>
-                <div class="field">
-                    <label>Anwani / Mtaa</label>
-                    <input type="text" id="address" placeholder="Mtaa, Kata, Wilaya">
-                </div>
+      <div class="nav-row">
+        <div style="flex:1"></div>
+        <button class="btn btn-primary" onclick="nextStep(1)">Endelea →</button>
+      </div>
+    </div><!-- /page-1 -->
 
-                <div class="field span-2">
-                    <label>Aina ya Kitambulisho</label>
-                    <div class="check-group" id="idTypeGroup">
-                        <label class="check-pill">
-                            <input type="radio" name="idType" value="NIDA" onchange="setIdFormat(this.value)">
-                            NIDA
-                        </label>
-                        <label class="check-pill">
-                            <input type="radio" name="idType" value="Pasipoti" onchange="setIdFormat(this.value)">
-                            Pasipoti
-                        </label>
-                        <label class="check-pill">
-                            <input type="radio" name="idType" value="Leseni" onchange="setIdFormat(this.value)">
-                            Leseni
-                        </label>
-                        <label class="check-pill">
-                            <input type="radio" name="idType" value="MpigaKura" onchange="setIdFormat(this.value)">
-                            Kadi ya Mpiga Kura
-                        </label>
-                        <label class="check-pill">
-                            <input type="radio" name="idType" value="Kingine" onchange="setIdFormat(this.value)">
-                            Kingine
-                        </label>
-                    </div>
-                </div>
+    <!-- ──────────────────────────────────────────
+         PAGE 2 · Mawasiliano & Kitambulisho
+    ─────────────────────────────────────────── -->
+    <div class="page" id="page-2">
+      <div class="section-title">
+        <span class="section-badge">2. Mawasiliano & Kitambulisho</span>
+        <div class="section-line"></div>
+      </div>
 
-                <div class="field span-2">
-                    <label>Namba ya Kitambulisho</label>
-                    <input type="text" id="idNumber" placeholder="Chagua aina ya kitambulisho kwanza">
-                </div>
-            </div>
-
-            <div class="divider"></div>
-
-            <div class="section-title">
-                <span class="section-badge">Dharura</span>
-                <div class="section-line"></div>
-            </div>
-
-            <div class="grid-2">
-                <div class="field">
-                    <label>Mtu wa Karibu</label>
-                    <input type="text" id="emergencyName" placeholder="Jina la mtu wa dharura">
-                </div>
-                <div class="field">
-                    <label>Simu ya Dharura</label>
-                    <input type="tel" id="emergencyPhone" value="+255" oninput="this.value = this.value.replace(/[^0-9+]/g, '')">
-                </div>
-            </div>
-
-            <div class="nav-row no-print">
-                <button class="btn btn-secondary" onclick="prevStep(2)">← Rudi</button>
-                <button class="btn btn-primary" onclick="nextStep(2)">Endelea →</button>
-            </div>
+      <div class="grid-2">
+        <div class="field">
+          <label>Namba ya Simu *</label>
+          <input type="tel" id="phone" value="+255" oninput="this.value=this.value.replace(/[^0-9+]/g,'')">
+        </div>
+        <div class="field">
+          <label>Anwani / Mtaa</label>
+          <input type="text" id="address" placeholder="Mtaa, Kata, Wilaya">
         </div>
 
-        <!-- PAGE 3: Kidini -->
-        <div class="page" id="page-3">
-            <div class="section-title">
-                <span class="section-badge">3. Maelezo ya Kidini</span>
-                <div class="section-line"></div>
-            </div>
-
-            <div class="grid-2">
-                <div class="field">
-                    <label>Dini Uliyoifuata Kabla</label>
-                    <div class="select-wrap">
-                        <select id="formerReligion">
-                            <option value="">-- Chagua Dini --</option>
-                            <option value="Ukristo">Ukristo</option>
-                            <option value="Uhindu">Uhindu</option>
-                            <option value="Ubuda">Ubuda</option>
-                            <option value="Ushirikina">Ushirikina / Jadi</option>
-                            <option value="Sikuwa na Dini">Sikuwa na Dini</option>
-                            <option value="Nyingine">Nyingine</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="field">
-                    <label>Jina Jipya la Kiislamu</label>
-                    <input type="text" id="islamicName" placeholder="Jina la Kiislamu" style="font-weight:700; color:var(--forest);">
-                </div>
-                <div class="field span-2">
-                    <label>Sababu za Kuingia Kwenye Uislamu</label>
-                    <textarea id="reason" rows="3" placeholder="Eleza kwa ufupi sababu zilizokupelekea kusilimu..."></textarea>
-                </div>
-            </div>
-
-            <div class="divider"></div>
-
-            <!-- Declaration -->
-            <div class="declaration">
-                <p class="declaration-stmt">
-                    Mimi <span id="tamkoJina" class="declaration-name">____________________</span> 
-                    nathibitisha kuwa nimeamua kuingia katika dini ya Kiislamu kwa hiari yangu, bila kulazimishwa wala kushawishiwa kwa maslahi ya kidunia. Nimetamka maneno ya Shahada:
-                </p>
-                <div class="declaration-arabic">
-                    "أَشْهَدُ أَن لَّا إِلَهَ إِلَّا اللهُ وَحْدَهُ لَا شَرِيْكَ لَهُ، وَأَشْهَدُ أَنَّ مُحَمَّداً عَبْدُهُ وَرَسُوْلُهُ"
-                </div>
-                <div class="declaration-trans">
-                    "Nashudia kuwa hapana mungu apasaye kuabudiwa kwa haki isipokuwa Allah, na nashudia kuwa Muhammad ni mja na mtume wake."
-                </div>
-
-                <div class="sig-row">
-                    <div class="sig-box">
-                        <div class="sig-line"></div>
-                        <div class="sig-label">Sahihi ya Msilimu</div>
-                    </div>
-                    <div class="sig-box">
-                        <div class="sig-line" id="dateDisplay"></div>
-                        <div class="sig-label">Tarehe</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="nav-row no-print">
-                <button class="btn btn-secondary" onclick="prevStep(3)">← Rudi</button>
-                <button class="btn btn-primary" onclick="nextStep(3)">Endelea →</button>
-            </div>
+        <div class="field span-2">
+          <label>Aina ya Kitambulisho</label>
+          <div class="check-group" id="idTypeGroup">
+            <label class="check-pill"><input type="radio" name="idType" value="NIDA"      onchange="setIdFormat(this.value)"> NIDA</label>
+            <label class="check-pill"><input type="radio" name="idType" value="Pasipoti"  onchange="setIdFormat(this.value)"> Pasipoti</label>
+            <label class="check-pill"><input type="radio" name="idType" value="Leseni"    onchange="setIdFormat(this.value)"> Leseni</label>
+            <label class="check-pill"><input type="radio" name="idType" value="MpigaKura" onchange="setIdFormat(this.value)"> Kadi ya Mpiga Kura</label>
+            <label class="check-pill"><input type="radio" name="idType" value="Kingine"   onchange="setIdFormat(this.value)"> Kingine</label>
+          </div>
         </div>
 
-        <!-- PAGE 4: Ushahidi -->
-        <div class="page" id="page-4">
-            <div class="section-title">
-                <span class="section-badge">4. Ushahidi wa Kusilimu</span>
-                <div class="section-line"></div>
-            </div>
-
-            <p style="font-size:0.82rem; color:var(--muted); margin-bottom:1.5rem; line-height:1.6;">
-                Mashahidi wawili (2) wanaohitajika kuthibitisha kusilimu. Wote lazima wawe Waislamu wazima na wameshuhudia Shahada moja kwa moja.
-            </p>
-
-            <!-- Shahidi 1 -->
-            <div class="witness-card" id="witnessCard1">
-                <div class="witness-header">
-                    <span class="witness-num">Shahidi wa Kwanza</span>
-                    <div class="witness-line"></div>
-                </div>
-                <div class="grid-3" style="margin-bottom:0.75rem;">
-                    <div class="field span-2">
-                        <label>Jina Kamili la Shahidi *</label>
-                        <input type="text" id="witness1Name" placeholder="Jina kamili la shahidi" style="text-transform:uppercase;">
-                    </div>
-                    <div class="field">
-                        <label>Namba ya Simu</label>
-                        <input type="tel" id="witness1Phone" value="+255" oninput="this.value=this.value.replace(/[^0-9+]/g,'')">
-                    </div>
-                    <div class="field">
-                        <label>Uhusiano na Msilimu</label>
-                        <div class="select-wrap">
-                            <select id="witness1Rel">
-                                <option value="">-- Chagua --</option>
-                                <option value="Imamu / Sheikhe">Imamu / Sheikhe</option>
-                                <option value="Mume">Mume</option>
-                                <option value="Mke">Mke</option>
-                                <option value="Ndugu">Ndugu</option>
-                                <option value="Rafiki">Rafiki</option>
-                                <option value="Jirani">Jirani</option>
-                                <option value="Mwenzake wa Kazi">Mwenzake wa Kazi</option>
-                                <option value="Mwanafunzi Mwenzake">Mwanafunzi Mwenzake</option>
-                                <option value="Nyingine">Nyingine</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="field">
-                        <label>Namba ya Kitambulisho</label>
-                        <input type="text" id="witness1ID" placeholder="NIDA / Pasipoti / Leseni / Kura">
-                    </div>
-                    <div class="field">
-                        <label>Mtaa / Makazi</label>
-                        <input type="text" id="witness1Address" placeholder="Mtaa wa shahidi">
-                    </div>
-                </div>
-                <div class="witness-confirm">
-                    <label class="check-pill" id="w1ConfirmPill" onclick="toggleWitnessConfirm(this,'w1confirm',event)">
-                        <input type="checkbox" id="w1confirm">
-                        ✓ Ninathibitisha kuwa nilishuhudia Shahada ikiwa inatamkwa
-                    </label>
-                </div>
-            </div>
-
-            <div class="divider"></div>
-
-            <!-- Shahidi 2 -->
-            <div class="witness-card" id="witnessCard2">
-                <div class="witness-header">
-                    <span class="witness-num">Shahidi wa Pili</span>
-                    <div class="witness-line"></div>
-                </div>
-                <div class="grid-3" style="margin-bottom:0.75rem;">
-                    <div class="field span-2">
-                        <label>Jina Kamili la Shahidi *</label>
-                        <input type="text" id="witness2Name" placeholder="Jina kamili la shahidi" style="text-transform:uppercase;">
-                    </div>
-                    <div class="field">
-                        <label>Namba ya Simu</label>
-                        <input type="tel" id="witness2Phone" value="+255" oninput="this.value=this.value.replace(/[^0-9+]/g,'')">
-                    </div>
-                    <div class="field">
-                        <label>Uhusiano na Msilimu</label>
-                        <div class="select-wrap">
-                            <select id="witness2Rel">
-                                <option value="">-- Chagua --</option>
-                                <option value="Imamu / Sheikhe">Imamu / Sheikhe</option>
-                                <option value="Mume">Mume</option>
-                                <option value="Mke">Mke</option>
-                                <option value="Ndugu">Ndugu</option>
-                                <option value="Rafiki">Rafiki</option>
-                                <option value="Jirani">Jirani</option>
-                                <option value="Mwenzake wa Kazi">Mwenzake wa Kazi</option>
-                                <option value="Mwanafunzi Mwenzake">Mwanafunzi Mwenzake</option>
-                                <option value="Nyingine">Nyingine</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="field">
-                        <label>Namba ya Kitambulisho</label>
-                        <input type="text" id="witness2ID" placeholder="NIDA / Pasipoti / Leseni / Kura">
-                    </div>
-                    <div class="field">
-                        <label>Mtaa / Makazi</label>
-                        <input type="text" id="witness2Address" placeholder="Mtaa wa shahidi">
-                    </div>
-                </div>
-                <div class="witness-confirm">
-                    <label class="check-pill" id="w2ConfirmPill" onclick="toggleWitnessConfirm(this,'w2confirm',event)">
-                        <input type="checkbox" id="w2confirm">
-                        ✓ Ninathibitisha kuwa nilishuhudia Shahada ikiwa inatamkwa
-                    </label>
-                </div>
-            </div>
-
-            <div class="nav-row no-print">
-                <button class="btn btn-secondary" onclick="prevStep(4)">← Rudi</button>
-                <button class="btn btn-primary" onclick="nextStep(4)">Endelea →</button>
-            </div>
+        <div class="field span-2">
+          <label>Namba ya Kitambulisho</label>
+          <input type="text" id="idNumber" placeholder="Chagua aina ya kitambulisho kwanza">
         </div>
+      </div>
 
-        <!-- PAGE 5: Uthibitisho & Ofisi -->
-        <div class="page" id="page-5">
-            <div class="section-title">
-                <span class="section-badge">5. Uthibitisho & Ofisi</span>
-                <div class="section-line"></div>
-            </div>
+      <div class="divider"></div>
 
-            <!-- Summary -->
-            <div class="summary-grid" id="summaryGrid" style="margin-bottom:1.5rem;"></div>
+      <div class="section-title">
+        <span class="section-badge">Dharura</span>
+        <div class="section-line"></div>
+      </div>
 
-            <div class="divider"></div>
-
-            <!-- Office section -->
-            <div class="office-section">
-                <div class="reg-badge">
-                    <div class="reg-label">Namba ya Usajili</div>
-                    <div class="reg-value" id="regNo">MTK/FRK/026/---</div>
-                </div>
-                <div class="office-note-field">
-                    <div class="office-note-label">Maoni ya Ofisi</div>
-                    <input type="text" id="officeNote" class="office-note-input" placeholder="Maelezo ya ziada ya ofisi...">
-                </div>
-                <div class="qr-wrap">
-                    <div id="qrcode"></div>
-                    <div class="qr-label">Verification QR</div>
-                </div>
-            </div>
-
-            <div class="nav-row no-print">
-                <button class="btn btn-secondary" onclick="prevStep(5)">← Rudi</button>
-                <button class="btn btn-print" onclick="window.print()">🖨 Print</button>
-                <button class="btn btn-primary" id="submitBtn" onclick="submitForm()">✓ Hifadhi Taarifa</button>
-            </div>
+      <div class="grid-2">
+        <div class="field">
+          <label>Mtu wa Karibu</label>
+          <input type="text" id="emergencyName" placeholder="Jina la mtu wa dharura">
         </div>
+        <div class="field">
+          <label>Simu ya Dharura</label>
+          <input type="tel" id="emergencyPhone" value="+255" oninput="this.value=this.value.replace(/[^0-9+]/g,'')">
+        </div>
+      </div>
 
-    </div><!-- /form-card -->
+      <div class="nav-row">
+        <button class="btn btn-secondary" onclick="prevStep(2)">← Rudi</button>
+        <button class="btn btn-primary"   onclick="nextStep(2)">Endelea →</button>
+      </div>
+    </div><!-- /page-2 -->
+
+    <!-- ──────────────────────────────────────────
+         PAGE 3 · Maelezo ya Kidini
+    ─────────────────────────────────────────── -->
+    <div class="page" id="page-3">
+      <div class="section-title">
+        <span class="section-badge">3. Maelezo ya Kidini</span>
+        <div class="section-line"></div>
+      </div>
+
+      <div class="grid-2">
+        <div class="field">
+          <label>Dini Uliyoifuata Kabla</label>
+          <div class="select-wrap">
+            <select id="formerReligion">
+              <option value="">-- Chagua Dini --</option>
+              <option value="Ukristo">Ukristo</option>
+              <option value="Uhindu">Uhindu</option>
+              <option value="Ubuda">Ubuda</option>
+              <option value="Ushirikina">Ushirikina / Jadi</option>
+              <option value="Sikuwa na Dini">Sikuwa na Dini</option>
+              <option value="Nyingine">Nyingine</option>
+            </select>
+          </div>
+        </div>
+        <div class="field">
+          <label>Jina Jipya la Kiislamu</label>
+          <input type="text" id="islamicName" placeholder="Jina la Kiislamu" style="font-weight:700; color:var(--forest);">
+        </div>
+        <div class="field span-2">
+          <label>Sababu za Kuingia Kwenye Uislamu</label>
+          <textarea id="reason" rows="3" placeholder="Eleza kwa ufupi sababu zilizokupelekea kusilimu..."></textarea>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Shahada declaration -->
+      <div class="declaration">
+        <p class="declaration-stmt">
+          Mimi <span id="tamkoJina" class="declaration-name">____________________</span>
+          nathibitisha kuwa nimeamua kuingia katika dini ya Kiislamu kwa hiari yangu,
+          bila kulazimishwa wala kushawishiwa kwa maslahi ya kidunia. Nimetamka maneno ya Shahada:
+        </p>
+        <div class="declaration-arabic">
+          "أَشْهَدُ أَن لَّا إِلَهَ إِلَّا اللهُ وَحْدَهُ لَا شَرِيْكَ لَهُ، وَأَشْهَدُ أَنَّ مُحَمَّداً عَبْدُهُ وَرَسُوْلُهُ"
+        </div>
+        <div class="declaration-trans">
+          "Nashudia kuwa hapana mungu apasaye kuabudiwa kwa haki isipokuwa Allah,
+          na nashudia kuwa Muhammad ni mja na mtume wake."
+        </div>
+        <div class="sig-row">
+          <div class="sig-box">
+            <div class="sig-line"></div>
+            <div class="sig-label">Sahihi ya Msilimu</div>
+          </div>
+          <div class="sig-box">
+            <div class="sig-line" id="dateDisplay"></div>
+            <div class="sig-label">Tarehe</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="nav-row">
+        <button class="btn btn-secondary" onclick="prevStep(3)">← Rudi</button>
+        <button class="btn btn-primary"   onclick="nextStep(3)">Endelea →</button>
+      </div>
+    </div><!-- /page-3 -->
+
+    <!-- ──────────────────────────────────────────
+         PAGE 4 · Ushahidi
+    ─────────────────────────────────────────── -->
+    <div class="page" id="page-4">
+      <div class="section-title">
+        <span class="section-badge">4. Ushahidi wa Kusilimu</span>
+        <div class="section-line"></div>
+      </div>
+
+      <p style="font-size:.82rem; color:var(--muted); margin-bottom:1.5rem; line-height:1.6;">
+        Mashahidi wawili (2) wanaohitajika kuthibitisha kusilimu.
+        Wote lazima wawe Waislamu wazima na wameshuhudia Shahada moja kwa moja.
+      </p>
+
+      <!-- Shahidi 1 -->
+      <div class="witness-card">
+        <div class="witness-header">
+          <span class="witness-num">Shahidi wa Kwanza</span>
+          <div class="witness-line"></div>
+        </div>
+        <div class="grid-3" style="margin-bottom:.75rem;">
+          <div class="field span-2">
+            <label>Jina Kamili la Shahidi *</label>
+            <input type="text" id="witness1Name" placeholder="Jina kamili la shahidi" style="text-transform:uppercase;">
+          </div>
+          <div class="field">
+            <label>Namba ya Simu</label>
+            <input type="tel" id="witness1Phone" value="+255" oninput="this.value=this.value.replace(/[^0-9+]/g,'')">
+          </div>
+          <div class="field">
+            <label>Uhusiano na Msilimu</label>
+            <div class="select-wrap">
+              <select id="witness1Rel">
+                <option value="">-- Chagua --</option>
+                <option>Imamu / Sheikhe</option><option>Mume</option><option>Mke</option>
+                <option>Ndugu</option><option>Rafiki</option><option>Jirani</option>
+                <option>Mwenzake wa Kazi</option><option>Mwanafunzi Mwenzake</option><option>Nyingine</option>
+              </select>
+            </div>
+          </div>
+          <div class="field">
+            <label>Namba ya Kitambulisho</label>
+            <input type="text" id="witness1ID" placeholder="NIDA / Pasipoti / Leseni / Kura">
+          </div>
+          <div class="field">
+            <label>Mtaa / Makazi</label>
+            <input type="text" id="witness1Address" placeholder="Mtaa wa shahidi">
+          </div>
+        </div>
+        <div class="witness-confirm">
+          <label class="check-pill" id="w1ConfirmPill" onclick="toggleWitnessConfirm(this,'w1confirm',event)">
+            <input type="checkbox" id="w1confirm">
+            ✓ Ninathibitisha kuwa nilishuhudia Shahada ikiwa inatamkwa
+          </label>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Shahidi 2 -->
+      <div class="witness-card">
+        <div class="witness-header">
+          <span class="witness-num">Shahidi wa Pili</span>
+          <div class="witness-line"></div>
+        </div>
+        <div class="grid-3" style="margin-bottom:.75rem;">
+          <div class="field span-2">
+            <label>Jina Kamili la Shahidi *</label>
+            <input type="text" id="witness2Name" placeholder="Jina kamili la shahidi" style="text-transform:uppercase;">
+          </div>
+          <div class="field">
+            <label>Namba ya Simu</label>
+            <input type="tel" id="witness2Phone" value="+255" oninput="this.value=this.value.replace(/[^0-9+]/g,'')">
+          </div>
+          <div class="field">
+            <label>Uhusiano na Msilimu</label>
+            <div class="select-wrap">
+              <select id="witness2Rel">
+                <option value="">-- Chagua --</option>
+                <option>Imamu / Sheikhe</option><option>Mume</option><option>Mke</option>
+                <option>Ndugu</option><option>Rafiki</option><option>Jirani</option>
+                <option>Mwenzake wa Kazi</option><option>Mwanafunzi Mwenzake</option><option>Nyingine</option>
+              </select>
+            </div>
+          </div>
+          <div class="field">
+            <label>Namba ya Kitambulisho</label>
+            <input type="text" id="witness2ID" placeholder="NIDA / Pasipoti / Leseni / Kura">
+          </div>
+          <div class="field">
+            <label>Mtaa / Makazi</label>
+            <input type="text" id="witness2Address" placeholder="Mtaa wa shahidi">
+          </div>
+        </div>
+        <div class="witness-confirm">
+          <label class="check-pill" id="w2ConfirmPill" onclick="toggleWitnessConfirm(this,'w2confirm',event)">
+            <input type="checkbox" id="w2confirm">
+            ✓ Ninathibitisha kuwa nilishuhudia Shahada ikiwa inatamkwa
+          </label>
+        </div>
+      </div>
+
+      <div class="nav-row">
+        <button class="btn btn-secondary" onclick="prevStep(4)">← Rudi</button>
+        <button class="btn btn-primary"   onclick="nextStep(4)">Endelea →</button>
+      </div>
+    </div><!-- /page-4 -->
+
+    <!-- ──────────────────────────────────────────
+         PAGE 5 · Uthibitisho & Ofisi
+    ─────────────────────────────────────────── -->
+    <div class="page" id="page-5">
+      <div class="section-title">
+        <span class="section-badge">5. Uthibitisho & Ofisi</span>
+        <div class="section-line"></div>
+      </div>
+
+      <!-- Summary grid (built by JS) -->
+      <div class="summary-grid" id="summaryGrid"></div>
+
+      <div class="divider"></div>
+
+      <!-- Office bar -->
+      <div class="office-section">
+        <div class="reg-badge">
+          <div class="reg-label">Namba ya Usajili</div>
+          <div class="reg-value" id="regNo">MTK/FRK/026/---</div>
+        </div>
+        <div class="office-note-field">
+          <div class="office-note-label">Maoni ya Ofisi</div>
+          <input type="text" id="officeNote" class="office-note-input" placeholder="Maelezo ya ziada ya ofisi...">
+        </div>
+        <div class="qr-wrap">
+          <div id="qrcode"></div>
+          <div class="qr-label">Namba ya Usajili</div>
+        </div>
+      </div>
+
+      <div class="nav-row">
+        <button class="btn btn-secondary" onclick="prevStep(5)">← Rudi</button>
+        <button class="btn btn-print"     onclick="triggerPrint()">🖨 Print</button>
+        <button class="btn btn-primary"   id="submitBtn" onclick="submitForm()">✓ Hifadhi Taarifa</button>
+      </div>
+    </div><!-- /page-5 -->
+
+  </div><!-- /form-card -->
 </div><!-- /wrapper -->
 
-<!-- PRINT SHEET (hidden on screen, visible on print) -->
+<!-- PRINT SHEET (hidden on screen, shown on print) -->
 <div id="print-sheet"></div>
 
 <!-- TOAST -->
 <div class="toast" id="toast"></div>
 
+<!-- ═══════════════════════════════════════════════
+     JAVASCRIPT
+════════════════════════════════════════════════ -->
 <script>
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw3JfIX5Rk3Ks71GoQ7Fh1gHa_nllfsg33-jIDAlkrNaM4oQu7vZZ2uigTXE8ly1yJhXA/exec';
+'use strict';
 
-    // ── STEP NAVIGATION ──────────────────────────────────────────
-    let currentStep = 1;
+/* ── CONFIG ───────────────────────────────────────── */
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz9SriXQyOCLjPa1JXwhEessEOiud1tWKGOGtADc4MPpzUjzTzXxZ58ZNWVi0DV1gDjzg/exec';
 
-    function goToStep(n) {
-        if (n > currentStep) return; // only allow going back directly
-        switchToPage(n);
-    }
+/* ── HELPERS ──────────────────────────────────────── */
+const $  = id => document.getElementById(id);
+const V  = id => ($(''+id) ? ($(''+id).value || '—') : '—');
+const $$  = sel => document.querySelectorAll(sel);
 
-    function nextStep(from) {
-        if (!validatePage(from)) return;
-        switchToPage(from + 1);
-        if (from + 1 === 5) buildSummary();
-    }
-
-    function prevStep(from) {
-        switchToPage(from - 1);
-    }
-
-    function switchToPage(n) {
-        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-        document.getElementById('page-' + n).classList.add('active');
-
-        document.querySelectorAll('.step').forEach((s, i) => {
-            s.classList.remove('active', 'done');
-            if (i + 1 < n) s.classList.add('done');
-            if (i + 1 === n) s.classList.add('active');
-        });
-
-        currentStep = n;
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-
-    // ── VALIDATION ───────────────────────────────────────────────
-    function validatePage(page) {
-        if (page === 1) {
-            const name = document.getElementById('fullName').value.trim();
-            const gender = document.querySelector('input[name="gender"]:checked');
-            if (!name) { showToast('⚠️ Tafadhali andika Jina Kamili.'); return false; }
-            if (!gender) { showToast('⚠️ Tafadhali chagua Jinsia.'); return false; }
-        }
-        if (page === 4) {
-            const w1 = document.getElementById('witness1Name').value.trim();
-            const w2 = document.getElementById('witness2Name').value.trim();
-            const c1 = document.getElementById('w1confirm').checked;
-            const c2 = document.getElementById('w2confirm').checked;
-            if (!w1) { showToast('⚠️ Tafadhali andika jina la Shahidi wa Kwanza.'); return false; }
-            if (!w2) { showToast('⚠️ Tafadhali andika jina la Shahidi wa Pili.'); return false; }
-            if (!c1 || !c2) { showToast('⚠️ Mashahidi wote wawili lazima wathibitishe kushuhudia.'); return false; }
-        }
-        return true;
-    }
-
-    // ── SYNC NAME IN DECLARATION ─────────────────────────────────
-    function syncName() {
-        const n = document.getElementById('fullName').value || '____________________';
-        document.getElementById('tamkoJina').innerText = n;
-    }
-
-    // ── RADIO PILLS ──────────────────────────────────────────────
-    function selectRadio(el, name, value) {
-        document.querySelectorAll('.radio-pill').forEach(p => p.classList.remove('selected'));
-        el.classList.add('selected');
-        el.querySelector('input').checked = true;
-        if (name === 'gender') filterMaritalStatus(value);
-    }
-
-    function toggleCheck(el, name, value) {
-        el.classList.toggle('selected');
-        el.querySelector('input').checked = el.classList.contains('selected');
-    }
-
-    function toggleWitnessConfirm(el, inputId, event) {
-        event.preventDefault();
-        const cb = document.getElementById(inputId);
-        cb.checked = !cb.checked;
-        el.classList.toggle('selected', cb.checked);
-    }
-
-    // ── MARITAL STATUS ───────────────────────────────────────────
-    function filterMaritalStatus(gender) {
-        const sel = document.getElementById('maritalStatus');
-        sel.innerHTML = '';
-        const opts = gender === 'Mwanaume'
-            ? ['Sijaoa', 'Nimeoa', 'Mtalaka', 'Mjane', 'Nyingineyo']
-            : ['Sijaolewa', 'Nimeolewa', 'Mtalaka', 'Mjane', 'Nyingineyo'];
-        opts.forEach(o => {
-            const el = document.createElement('option');
-            el.value = o; el.textContent = o;
-            sel.appendChild(el);
-        });
-    }
-
-    // ── PHONE CODES ──────────────────────────────────────────────
-    function updatePhoneCodes() {
-        const codes = { Tanzania:'+255', Kenya:'+254', Uganda:'+256', Rwanda:'+250', Burundi:'+257', 'Nchi Nyingine':'+' };
-        const c = codes[document.getElementById('citizenship').value] || '+';
-        ['phone','emergencyPhone'].forEach(id => { document.getElementById(id).value = c; });
-    }
-
-    // ── QR CODE ──────────────────────────────────────────────────
-    // QR inaelekeza kwa link ya Google Drive (Apps Script) ya rekodi hiyo
-    function buildRecordUrl(reg) {
-        return SCRIPT_URL + '?action=view&reg=' + encodeURIComponent(reg);
-    }
-
-    function updateQRCode(reg) {
-        const d = document.getElementById("qrcode");
-        d.innerHTML = "";
-        if (reg) {
-            const url = buildRecordUrl(reg);
-            new QRCode(d, {
-                text: url,
-                width: 72,
-                height: 72,
-                colorDark: "#0a3622",
-                colorLight: "#ffffff",
-                correctLevel: QRCode.CorrectLevel.H
-            });
-        }
-    }
-
-    // ── PHOTO UPLOAD ─────────────────────────────────────────────
-    document.getElementById('photoFile').onchange = e => {
-        const [file] = e.target.files;
-        if (!file || !file.type.startsWith('image/')) { showToast('⚠️ Tafadhali pakia picha pekee.'); return; }
-        const prev = document.getElementById('photoPreview');
-        prev.src = URL.createObjectURL(file);
-        prev.style.display = 'block';
-        document.getElementById('photoTxt').style.display = 'none';
-    };
-
-    // ── ID FORMAT ────────────────────────────────────────────────
-    let currentType = "";
-
-    function setIdFormat(type) {
-        currentType = type;
-        const input = document.getElementById("idNumber");
-        input.value = "";
-
-        // Update check-pill selected state
-        document.querySelectorAll('#idTypeGroup .check-pill').forEach(pill => {
-            const radio = pill.querySelector('input[type="radio"]');
-            if (radio && radio.value === type) {
-                pill.classList.add('selected');
-            } else {
-                pill.classList.remove('selected');
-            }
-        });
-
-        switch(type) {
-            case "NIDA":
-                input.placeholder = "XXXXXXXX-XXXXX-XXXXX-XX";
-                input.maxLength = 22;
-                break;
-            case "Pasipoti":
-                input.placeholder = "ABCXXXXXX";
-                input.maxLength = 9;
-                break;
-            case "Leseni":
-                input.placeholder = "XXXXXXXXXX";
-                input.maxLength = 14;
-                break;
-            case "MpigaKura":
-                input.placeholder = "T-XXXX-XXXX-XXX-X";
-                input.maxLength = 15;
-                break;
-            case "Kingine":
-                input.placeholder = "Ingiza namba ya kitambulisho";
-                input.maxLength = 30;
-                break;
-        }
-    }
-
-    document.addEventListener('DOMContentLoaded', function () {
-        document.getElementById("idNumber").addEventListener("input", function () {
-            let value = this.value;
-
-            switch(currentType) {
-                /* ================= NIDA ================= */
-                case "NIDA":
-                    value = value.replace(/\D/g, "");
-                    if(value.length > 8)  value = value.slice(0,8)  + "-" + value.slice(8);
-                    if(value.length > 14) value = value.slice(0,14) + "-" + value.slice(14);
-                    if(value.length > 20) value = value.slice(0,20) + "-" + value.slice(20);
-                    if(value.length > 23) value = value.slice(0,23);
-                    break;
-
-                /* ================= PASSPORT ================= */
-                case "Pasipoti":
-                    value = value.toUpperCase().replace(/[^A-Z0-9]/g, "");
-                    break;
-
-                /* ================= LESENI ================= */
-                case "Leseni":
-                    value = value.toUpperCase().replace(/[^A-Z0-9]/g, "");
-                    if(value.length > 10) value = value.slice(0,10);
-                    break;
-
-                /* ================= MPIGA KURA ================= */
-                case "MpigaKura":
-                    value = value.toUpperCase().replace(/[^A-Z0-9]/g, "");
-                    if(value.length > 1)  value = value.slice(0,1)  + "-" + value.slice(1);
-                    if(value.length > 6)  value = value.slice(0,6)  + "-" + value.slice(6);
-                    if(value.length > 11) value = value.slice(0,11) + "-" + value.slice(11);
-                    if(value.length > 15) value = value.slice(0,15) + "-" + value.slice(15);
-                    if(value.length > 17) value = value.slice(0,17);
-                    break;
-
-                /* ================= KINGINE ================= */
-                case "Kingine":
-                    value = value.replace(/[^A-Z0-9]/gi, "");
-                    break;
-            }
-
-            this.value = value;
-        });
-    });
-
-    // ── SUMMARY ──────────────────────────────────────────────────
-    function submitForm() {
-    const btn = document.getElementById('submitBtn');
-    const gender = document.querySelector('input[name="gender"]:checked');
-    if (!gender) { showToast('⚠️ Tafadhali chagua Jinsia.'); return; }
-
-    btn.textContent = 'INAHIFADHI...';
-    btn.disabled = true;
-
-    const now = new Date();
-    const timestamp = now.toLocaleString('sw-TZ', { timeZone: 'Africa/Nairobi', hour12: false });
-    const tarehe_kusilimu = now.toLocaleDateString('sw-TZ', {
-        timeZone: 'Africa/Nairobi', day: '2-digit', month: '2-digit', year: 'numeric'
-    });
-
-    const dobVal = document.getElementById('dob').value;
-    let umri = '';
-    if (dobVal) {
-        const dob = new Date(dobVal);
-        let age = now.getFullYear() - dob.getFullYear();
-        const dm = now.getMonth() - dob.getMonth();
-        if (dm < 0 || (dm === 0 && now.getDate() < dob.getDate())) age--;
-        if (age > 0) umri = String(age);
-    }
-
-    const idTypeEl = document.querySelector('input[name="idType"]:checked');
-    const w1 = document.getElementById('w1confirm').checked ? 'NDIYO ✓' : 'HAPANA ✗';
-    const w2 = document.getElementById('w2confirm').checked ? 'NDIYO ✓' : 'HAPANA ✗';
-    const regNo = document.getElementById('regNo').innerText.trim();
-    const recordUrl = buildRecordUrl(regNo);
-
-    // Tengeneza object ya data (keys zinalingana na headers)
-    const data = {
-        regNo, tarehe_kusilimu, timestamp,
-        jina_kamili: (document.getElementById('fullName').value || '').trim().toUpperCase(),
-        jina_la_kiislamu: (document.getElementById('islamicName').value || '').trim(),
-        tarehe_kuzaliwa: dobVal,
-        umri,
-        jinsia: gender.value,
-        uraia: document.getElementById('citizenship').value,
-        hali_ya_ndoa: document.getElementById('maritalStatus').value || '',
-        simu: (document.getElementById('phone').value || '').trim(),
-        anwani: (document.getElementById('address').value || '').trim(),
-        aina_kitambulisho: idTypeEl ? idTypeEl.value : '',
-        namba_kitambulisho: (document.getElementById('idNumber').value || '').trim(),
-        dharura_jina: (document.getElementById('emergencyName').value || '').trim(),
-        dharura_simu: (document.getElementById('emergencyPhone').value || '').trim(),
-        dini_ya_awali: document.getElementById('formerReligion').value || '',
-        sababu_kusilimu: (document.getElementById('reason').value || '').trim(),
-        shahidi1_jina: (document.getElementById('witness1Name').value || '').trim().toUpperCase(),
-        shahidi1_simu: (document.getElementById('witness1Phone').value || '').trim(),
-        shahidi1_uhusiano: document.getElementById('witness1Rel').value || '',
-        shahidi1_id: (document.getElementById('witness1ID').value || '').trim(),
-        shahidi1_mtaa: (document.getElementById('witness1Address').value || '').trim(),
-        shahidi1_imethibitishwa: w1,
-        shahidi2_jina: (document.getElementById('witness2Name').value || '').trim().toUpperCase(),
-        shahidi2_simu: (document.getElementById('witness2Phone').value || '').trim(),
-        shahidi2_uhusiano: document.getElementById('witness2Rel').value || '',
-        shahidi2_id: (document.getElementById('witness2ID').value || '').trim(),
-        shahidi2_mtaa: (document.getElementById('witness2Address').value || '').trim(),
-        shahidi2_imethibitishwa: w2,
-        maoni_ofisi: (document.getElementById('officeNote').value || '').trim(),
-        recordUrl,
-    };
-
-    // Geuza object kuwa x-www-form-urlencoded
-    const formBody = Object.keys(data)
-        .map(key => encodeURIComponent(key) + '=' + encodeURIComponent(data[key]))
-        .join('&');
-
-    // Tumia mode: 'no-cors' na Content-Type sahihi
-    fetch(SCRIPT_URL, {
-        method: 'POST',
-        mode: 'no-cors',  // Huu ni muhimu kwa CORS
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: formBody
-    })
-    .then(() => {
-        // Kwa no-cors, hatuwezi kusoma response, lakini tunadhani imefanikiwa
-        showToast('✅ Alhamdulillah! Taarifa zimehifadhiwa vizuri.');
-        const lastNum = regNo.split('/').pop();
-        localStorage.setItem('lastReg', parseInt(lastNum) || 0);
-        setTimeout(() => location.reload(), 2500);
-    })
-    .catch(() => {
-        showToast('❌ Tatizo la mtandao! Jaribu tena.');
-        btn.disabled = false;
-        btn.textContent = '✓ Hifadhi Taarifa';
-    });
+function showToast(msg) {
+  const t = $('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3500);
 }
 
-    // ── PRINT SHEET BUILDER ──────────────────────────────────────
-    function buildPrintSheet() {
-        const gender = document.querySelector('input[name="gender"]:checked');
-        const idType = document.querySelector('input[name="idType"]:checked');
-        const photoSrc = document.getElementById('photoPreview').src;
-        const photoVisible = document.getElementById('photoPreview').style.display !== 'none' && photoSrc && !photoSrc.endsWith('/');
+/* ── STEP NAVIGATION ──────────────────────────────── */
+let currentStep = 1;
 
-        const qrEl = document.getElementById('qrcode');
-        const qrImg = qrEl ? qrEl.querySelector('img, canvas') : null;
-        let qrHtml = '';
-        if (qrImg) {
-            if (qrImg.tagName === 'CANVAS') {
-                qrHtml = `<img src="${qrImg.toDataURL()}" style="width:60pt;height:60pt;">`;
-            } else {
-                qrHtml = `<img src="${qrImg.src}" style="width:60pt;height:60pt;">`;
-            }
-        }
+function goToStep(n) {
+  if (n >= currentStep) return;   // only allow going back
+  switchToPage(n);
+}
 
-        const V = id => {
-            const el = document.getElementById(id);
-            return el ? (el.value || '—') : '—';
-        };
-        const SEL = id => {
-            const el = document.getElementById(id);
-            return el ? (el.value || '—') : '—';
-        };
-        const T = id => {
-            const el = document.getElementById(id);
-            return el ? (el.innerText || el.textContent || '—') : '—';
-        };
+function nextStep(from) {
+  if (!validatePage(from)) return;
+  const next = from + 1;
+  switchToPage(next);
+  if (next === 5) buildSummary();
+}
 
-        const fullName = document.getElementById('fullName').value || '____________________';
-        const dateDisplay = document.getElementById('dateDisplay').innerText || '';
-        const regNo = document.getElementById('regNo').innerText || '';
-        const recordUrl = buildRecordUrl(regNo);
+function prevStep(from) {
+  switchToPage(from - 1);
+}
 
-        document.getElementById('print-sheet').innerHTML = `
-        <div class="ps-header">
-            <div class="ps-arabic">بِسْمِ اللهِ الرَّحْمَنِ الرَّحِيمِ</div>
-            <h1>Fomu Rasmi ya Kusilimu</h1>
-            <p>Masjid Taqwa · Kibaha, Mailimoja &nbsp;|&nbsp; 📞 +255 713 813 787</p>
-        </div>
-        <div class="ps-body">
+function switchToPage(n) {
+  $$('.page').forEach(p => p.classList.remove('active'));
+  $('page-' + n).classList.add('active');
 
-            <!-- SECTION 1: Taarifa Binafsi -->
-            <div class="ps-section">
-                <span class="ps-badge">1. Taarifa Binafsi</span>
-                <div class="ps-line"></div>
-            </div>
-            <div class="ps-top-row">
-                <div class="ps-photo-box">
-                    ${photoVisible
-                        ? `<img src="${photoSrc}" alt="Picha">`
-                        : `<span>Picha<br>Hapa</span>`}
-                </div>
-                <div style="flex:1;">
-                    <div class="ps-grid">
-                        <div class="ps-field ps-span3">
-                            <div class="ps-label">Jina Kamili</div>
-                            <div class="ps-value" style="text-transform:uppercase;font-size:10pt;">${fullName}</div>
-                        </div>
-                        <div class="ps-field">
-                            <div class="ps-label">Tarehe ya Kuzaliwa</div>
-                            <div class="ps-value">${V('dob')}</div>
-                        </div>
-                        <div class="ps-field">
-                            <div class="ps-label">Jinsia</div>
-                            <div class="ps-value">${gender ? gender.value : '—'}</div>
-                        </div>
-                        <div class="ps-field">
-                            <div class="ps-label">Uraia</div>
-                            <div class="ps-value">${V('citizenship')}</div>
-                        </div>
-                        <div class="ps-field">
-                            <div class="ps-label">Hali ya Ndoa</div>
-                            <div class="ps-value">${V('maritalStatus')}</div>
-                        </div>
-                        <div class="ps-field">
-                            <div class="ps-label">Aina ya Kitambulisho</div>
-                            <div class="ps-value">${idType ? idType.value : '—'}</div>
-                        </div>
-                        <div class="ps-field">
-                            <div class="ps-label">Namba ya Kitambulisho</div>
-                            <div class="ps-value">${V('idNumber')}</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+  $$('.step').forEach((s, i) => {
+    s.classList.remove('active', 'done');
+    if (i + 1 < n)  s.classList.add('done');
+    if (i + 1 === n) s.classList.add('active');
+  });
 
-            <!-- SECTION 2: Mawasiliano -->
-            <div class="ps-section">
-                <span class="ps-badge">2. Mawasiliano</span>
-                <div class="ps-line"></div>
-            </div>
-            <div class="ps-grid">
-                <div class="ps-field">
-                    <div class="ps-label">Namba ya Simu</div>
-                    <div class="ps-value">${V('phone')}</div>
-                </div>
-                <div class="ps-field ps-span2">
-                    <div class="ps-label">Anwani / Mtaa</div>
-                    <div class="ps-value">${V('address')}</div>
-                </div>
-                <div class="ps-field">
-                    <div class="ps-label">Mtu wa Dharura</div>
-                    <div class="ps-value">${V('emergencyName')}</div>
-                </div>
-                <div class="ps-field">
-                    <div class="ps-label">Simu ya Dharura</div>
-                    <div class="ps-value">${V('emergencyPhone')}</div>
-                </div>
-            </div>
+  currentStep = n;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
 
-            <!-- SECTION 3: Kidini -->
-            <div class="ps-section">
-                <span class="ps-badge">3. Maelezo ya Kidini</span>
-                <div class="ps-line"></div>
-            </div>
-            <div class="ps-grid-2" style="margin-bottom:6pt;">
-                <div class="ps-field">
-                    <div class="ps-label">Dini Uliyoifuata Kabla</div>
-                    <div class="ps-value">${V('formerReligion')}</div>
-                </div>
-                <div class="ps-field">
-                    <div class="ps-label">Jina Jipya la Kiislamu</div>
-                    <div class="ps-value" style="color:#0a3622;font-size:10pt;font-weight:700;">${V('islamicName')}</div>
-                </div>
-                <div class="ps-field ps-span2" style="grid-column:span 2;">
-                    <div class="ps-label">Sababu za Kuingia Kwenye Uislamu</div>
-                    <div class="ps-reason">${V('reason')}</div>
-                </div>
-            </div>
-
-            <!-- DECLARATION -->
-            <div class="ps-declaration">
-                <p class="ps-decl-stmt">
-                    Mimi <span class="ps-decl-name">${fullName}</span>
-                    nathibitisha kuwa nimeamua kuingia katika dini ya Kiislamu kwa hiari yangu, bila kulazimishwa wala kushawishiwa kwa maslahi ya kidunia. Nimetamka maneno ya Shahada:
-                </p>
-                <div class="ps-decl-arabic">
-                    "أَشْهَدُ أَن لَّا إِلَهَ إِلَّا اللهُ وَحْدَهُ لَا شَرِيْكَ لَهُ، وَأَشْهَدُ أَنَّ مُحَمَّداً عَبْدُهُ وَرَسُوْلُهُ"
-                </div>
-                <div class="ps-decl-trans">
-                    "Nashudia kuwa hapana mungu apasaye kuabudiwa kwa haki isipokuwa Allah, na nashudia kuwa Muhammad ni mja na mtume wake."
-                </div>
-                <div class="ps-sig-row">
-                    <div class="ps-sig-box">
-                        <div class="ps-sig-line"></div>
-                        <div class="ps-sig-lbl">Sahihi ya Msilimu</div>
-                    </div>
-                    <div class="ps-sig-box">
-                        <div class="ps-sig-line">${dateDisplay}</div>
-                        <div class="ps-sig-lbl">Tarehe</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- SECTION 4: Ushahidi -->
-            <div class="ps-section" style="margin-top:10pt;">
-                <span class="ps-badge">4. Ushahidi wa Kusilimu</span>
-                <div class="ps-line"></div>
-            </div>
-            <div class="ps-witness-grid">
-                <!-- Shahidi 1 -->
-                <div class="ps-witness-card">
-                    <div class="ps-witness-num">Shahidi wa Kwanza</div>
-                    <div class="ps-field" style="margin-bottom:4pt;">
-                        <div class="ps-label">Jina Kamili</div>
-                        <div class="ps-value" style="text-transform:uppercase;">${V('witness1Name')}</div>
-                    </div>
-                    <div class="ps-grid-2" style="gap:4pt;">
-                        <div class="ps-field">
-                            <div class="ps-label">Simu</div>
-                            <div class="ps-value">${V('witness1Phone')}</div>
-                        </div>
-                        <div class="ps-field">
-                            <div class="ps-label">Uhusiano</div>
-                            <div class="ps-value">${SEL('witness1Rel')}</div>
-                        </div>
-                        <div class="ps-field">
-                            <div class="ps-label">Namba ya ID</div>
-                            <div class="ps-value">${V('witness1ID')}</div>
-                        </div>
-                        <div class="ps-field">
-                            <div class="ps-label">Mtaa</div>
-                            <div class="ps-value">${V('witness1Address')}</div>
-                        </div>
-                    </div>
-                    <div class="ps-witness-sig">
-                        <div class="ps-witness-sig-line"></div>
-                        <div class="ps-witness-sig-lbl">Sahihi ya Shahidi wa Kwanza</div>
-                    </div>
-                </div>
-                <!-- Shahidi 2 -->
-                <div class="ps-witness-card">
-                    <div class="ps-witness-num">Shahidi wa Pili</div>
-                    <div class="ps-field" style="margin-bottom:4pt;">
-                        <div class="ps-label">Jina Kamili</div>
-                        <div class="ps-value" style="text-transform:uppercase;">${V('witness2Name')}</div>
-                    </div>
-                    <div class="ps-grid-2" style="gap:4pt;">
-                        <div class="ps-field">
-                            <div class="ps-label">Simu</div>
-                            <div class="ps-value">${V('witness2Phone')}</div>
-                        </div>
-                        <div class="ps-field">
-                            <div class="ps-label">Uhusiano</div>
-                            <div class="ps-value">${SEL('witness2Rel')}</div>
-                        </div>
-                        <div class="ps-field">
-                            <div class="ps-label">Namba ya ID</div>
-                            <div class="ps-value">${V('witness2ID')}</div>
-                        </div>
-                        <div class="ps-field">
-                            <div class="ps-label">Mtaa</div>
-                            <div class="ps-value">${V('witness2Address')}</div>
-                        </div>
-                    </div>
-                    <div class="ps-witness-sig">
-                        <div class="ps-witness-sig-line"></div>
-                        <div class="ps-witness-sig-lbl">Sahihi ya Shahidi wa Pili</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- OFFICE -->
-            <div class="ps-office">
-                <div class="ps-reg-badge">
-                    <div class="ps-reg-lbl">Namba ya Usajili</div>
-                    <div class="ps-reg-val">${regNo}</div>
-                </div>
-                <div class="ps-office-note">
-                    <div class="ps-note-lbl">Maoni ya Ofisi</div>
-                    <div class="ps-note-val">${V('officeNote')}</div>
-                    <div style="font-size:5.5pt;opacity:0.55;margin-top:3pt;word-break:break-all;">${recordUrl}</div>
-                </div>
-                <div class="ps-qr-box">
-                    ${qrHtml}
-                    <div class="ps-qr-lbl">Scan — Rekodi ya Fomu</div>
-                </div>
-            </div>
-
-        </div>
-        `;
+/* ── VALIDATION ───────────────────────────────────── */
+function validatePage(page) {
+  if (page === 1) {
+    if (!$('fullName').value.trim()) {
+      showToast('⚠️ Tafadhali andika Jina Kamili.'); return false;
     }
+    if (!document.querySelector('input[name="gender"]:checked')) {
+      showToast('⚠️ Tafadhali chagua Jinsia.'); return false;
+    }
+  }
+  if (page === 4) {
+    if (!$('witness1Name').value.trim()) {
+      showToast('⚠️ Tafadhali andika jina la Shahidi wa Kwanza.'); return false;
+    }
+    if (!$('witness2Name').value.trim()) {
+      showToast('⚠️ Tafadhali andika jina la Shahidi wa Pili.'); return false;
+    }
+    if (!$('w1confirm').checked || !$('w2confirm').checked) {
+      showToast('⚠️ Mashahidi wote wawili lazima wathibitishe kushuhudia.'); return false;
+    }
+  }
+  return true;
+}
 
-    window.addEventListener('beforeprint', buildPrintSheet);
-    window.addEventListener('afterprint', () => {
-        document.getElementById('print-sheet').innerHTML = '';
+/* ── NAME SYNC (declaration box) ─────────────────── */
+function syncName() {
+  $('tamkoJina').innerText = $('fullName').value || '____________________';
+}
+
+/* ── GENDER / MARITAL STATUS ─────────────────────── */
+function selectGender(el, value) {
+  $$('.radio-pill').forEach(p => p.classList.remove('selected'));
+  el.classList.add('selected');
+  el.querySelector('input').checked = true;
+  filterMaritalStatus(value);
+}
+
+function filterMaritalStatus(gender) {
+  const sel = $('maritalStatus');
+  sel.innerHTML = '';
+  const opts = gender === 'Mwanaume'
+    ? ['Sijaoa','Nimeoa','Mtalaka','Mjane','Nyingineyo']
+    : ['Sijaolewa','Nimeolewa','Mtalaka','Mjane','Nyingineyo'];
+  opts.forEach(o => {
+    const opt = document.createElement('option');
+    opt.value = opt.textContent = o;
+    sel.appendChild(opt);
+  });
+}
+
+/* ── PHONE COUNTRY CODES ─────────────────────────── */
+function updatePhoneCodes() {
+  const codes = { Tanzania:'+255', Kenya:'+254', Uganda:'+256', Rwanda:'+250', Burundi:'+257', 'Nchi Nyingine':'+' };
+  const code = codes[$('citizenship').value] || '+';
+  ['phone','emergencyPhone'].forEach(id => { $(id).value = code; });
+}
+
+/* ── PHOTO UPLOAD ────────────────────────────────── */
+$('photoFile').onchange = e => {
+  const file = e.target.files[0];
+  if (!file || !file.type.startsWith('image/')) {
+    showToast('⚠️ Tafadhali pakia picha pekee.'); return;
+  }
+  const prev = $('photoPreview');
+  prev.src = URL.createObjectURL(file);
+  prev.style.display = 'block';
+  $('photoTxt').style.display = 'none';
+};
+
+/* ── ID TYPE & FORMAT ────────────────────────────── */
+let currentIdType = '';
+
+function setIdFormat(type) {
+  currentIdType = type;
+  const input = $('idNumber');
+  input.value = '';
+
+  $$('#idTypeGroup .check-pill').forEach(pill => {
+    const radio = pill.querySelector('input[type="radio"]');
+    pill.classList.toggle('selected', radio && radio.value === type);
+  });
+
+  const formats = {
+    NIDA:      { placeholder:'XXXXXXXX-XXXXX-XXXXX-XX', maxLength:23 },
+    Pasipoti:  { placeholder:'ABCXXXXXX',                maxLength:9  },
+    Leseni:    { placeholder:'XXXXXXXXXX',               maxLength:14 },
+    MpigaKura: { placeholder:'T-XXXX-XXXX-XXX-X',        maxLength:17 },
+    Kingine:   { placeholder:'Ingiza namba ya kitambulisho', maxLength:30 },
+  };
+  const f = formats[type] || {};
+  input.placeholder = f.placeholder || '';
+  input.maxLength   = f.maxLength   || 50;
+}
+
+$('idNumber').addEventListener('input', function () {
+  let v = this.value;
+  switch (currentIdType) {
+    case 'NIDA':
+      v = v.replace(/\D/g,'');
+      if (v.length >  8) v = v.slice(0, 8)  + '-' + v.slice(8);
+      if (v.length > 14) v = v.slice(0, 14) + '-' + v.slice(14);
+      if (v.length > 20) v = v.slice(0, 20) + '-' + v.slice(20);
+      if (v.length > 23) v = v.slice(0, 23);
+      break;
+    case 'Pasipoti':
+      v = v.toUpperCase().replace(/[^A-Z0-9]/g,'');
+      break;
+    case 'Leseni':
+      v = v.toUpperCase().replace(/[^A-Z0-9]/g,'');
+      if (v.length > 10) v = v.slice(0,10);
+      break;
+    case 'MpigaKura':
+      v = v.toUpperCase().replace(/[^A-Z0-9]/g,'');
+      if (v.length >  1) v = v.slice(0,1)  + '-' + v.slice(1);
+      if (v.length >  6) v = v.slice(0,6)  + '-' + v.slice(6);
+      if (v.length > 11) v = v.slice(0,11) + '-' + v.slice(11);
+      if (v.length > 15) v = v.slice(0,15) + '-' + v.slice(15);
+      if (v.length > 17) v = v.slice(0,17);
+      break;
+    case 'Kingine':
+      v = v.replace(/[^A-Za-z0-9]/g,'');
+      break;
+  }
+  this.value = v;
+});
+
+/* ── WITNESS CONFIRM TOGGLE ──────────────────────── */
+function toggleWitnessConfirm(el, inputId, event) {
+  event.preventDefault();
+  const cb = $(inputId);
+  cb.checked = !cb.checked;
+  el.classList.toggle('selected', cb.checked);
+}
+
+/* ── QR CODE (encodes registration number only) ─── */
+function updateQRCode(regNo) {
+  const d = $('qrcode');
+  d.innerHTML = '';
+  if (!regNo) return;
+  new QRCode(d, {
+    text:         regNo,
+    width:        72,
+    height:       72,
+    colorDark:    '#0a3622',
+    colorLight:   '#ffffff',
+    correctLevel: QRCode.CorrectLevel.H
+  });
+}
+
+/* ── SUMMARY (page 5) ────────────────────────────── */
+function buildSummary() {
+  const gender  = document.querySelector('input[name="gender"]:checked');
+  const idType  = document.querySelector('input[name="idType"]:checked');
+
+  const dobVal  = $('dob').value;
+  let umri = '—';
+  if (dobVal) {
+    const dob = new Date(dobVal);
+    const now = new Date();
+    let age = now.getFullYear() - dob.getFullYear();
+    const dm = now.getMonth() - dob.getMonth();
+    if (dm < 0 || (dm === 0 && now.getDate() < dob.getDate())) age--;
+    if (age > 0) umri = age + ' miaka';
+  }
+
+  const rows = [
+    ['Jina Kamili',        ($('fullName').value || '—').toUpperCase()],
+    ['Jina la Kiislamu',   V('islamicName')],
+    ['Jinsia',             gender ? gender.value : '—'],
+    ['Tarehe ya Kuzaliwa', dobVal || '—'],
+    ['Umri',               umri],
+    ['Uraia',              V('citizenship')],
+    ['Hali ya Ndoa',       V('maritalStatus')],
+    ['Namba ya Simu',      V('phone')],
+    ['Anwani',             V('address')],
+    ['Aina ya Kitambulisho', idType ? idType.value : '—'],
+    ['Namba ya Kitambulisho', V('idNumber')],
+    ['Dini ya Awali',      V('formerReligion')],
+    ['Shahidi wa Kwanza',  ($('witness1Name').value || '—').toUpperCase()],
+    ['Shahidi wa Pili',    ($('witness2Name').value || '—').toUpperCase()],
+  ];
+
+  $('summaryGrid').innerHTML = rows.map(([k, v]) => `
+    <div class="summary-item">
+      <div class="summary-key">${k}</div>
+      <div class="summary-val">${v}</div>
+    </div>
+  `).join('');
+}
+
+/* ── SUBMIT FORM ─────────────────────────────────── */
+function submitForm() {
+  const btn    = $('submitBtn');
+  const gender = document.querySelector('input[name="gender"]:checked');
+  if (!gender) { showToast('⚠️ Tafadhali chagua Jinsia.'); return; }
+
+  btn.textContent = 'INAHIFADHI...';
+  btn.disabled    = true;
+
+  const now       = new Date();
+  const timestamp = now.toLocaleString('sw-TZ', { timeZone:'Africa/Nairobi', hour12:false });
+  const tarehe    = now.toLocaleDateString('sw-TZ', { timeZone:'Africa/Nairobi', day:'2-digit', month:'2-digit', year:'numeric' });
+
+  const dobVal = $('dob').value;
+  let umri = '';
+  if (dobVal) {
+    const dob = new Date(dobVal);
+    let age = now.getFullYear() - dob.getFullYear();
+    const dm = now.getMonth() - dob.getMonth();
+    if (dm < 0 || (dm === 0 && now.getDate() < dob.getDate())) age--;
+    if (age > 0) umri = String(age);
+  }
+
+  const idTypeEl = document.querySelector('input[name="idType"]:checked');
+  const regNo    = $('regNo').innerText.trim();
+
+  const data = {
+    regNo,
+    tarehe_kusilimu:        tarehe,
+    timestamp,
+    jina_kamili:            ($('fullName').value || '').trim().toUpperCase(),
+    jina_la_kiislamu:       ($('islamicName').value || '').trim(),
+    tarehe_kuzaliwa:        dobVal,
+    umri,
+    jinsia:                 gender.value,
+    uraia:                  $('citizenship').value,
+    hali_ya_ndoa:           $('maritalStatus').value || '',
+    simu:                   ($('phone').value || '').trim(),
+    anwani:                 ($('address').value || '').trim(),
+    aina_kitambulisho:      idTypeEl ? idTypeEl.value : '',
+    namba_kitambulisho:     ($('idNumber').value || '').trim(),
+    dharura_jina:           ($('emergencyName').value || '').trim(),
+    dharura_simu:           ($('emergencyPhone').value || '').trim(),
+    dini_ya_awali:          $('formerReligion').value || '',
+    sababu_kusilimu:        ($('reason').value || '').trim(),
+    shahidi1_jina:          ($('witness1Name').value || '').trim().toUpperCase(),
+    shahidi1_simu:          ($('witness1Phone').value || '').trim(),
+    shahidi1_uhusiano:      $('witness1Rel').value || '',
+    shahidi1_id:            ($('witness1ID').value || '').trim(),
+    shahidi1_mtaa:          ($('witness1Address').value || '').trim(),
+    shahidi1_imethibitishwa: $('w1confirm').checked ? 'NDIYO ✓' : 'HAPANA ✗',
+    shahidi2_jina:          ($('witness2Name').value || '').trim().toUpperCase(),
+    shahidi2_simu:          ($('witness2Phone').value || '').trim(),
+    shahidi2_uhusiano:      $('witness2Rel').value || '',
+    shahidi2_id:            ($('witness2ID').value || '').trim(),
+    shahidi2_mtaa:          ($('witness2Address').value || '').trim(),
+    shahidi2_imethibitishwa: $('w2confirm').checked ? 'NDIYO ✓' : 'HAPANA ✗',
+    maoni_ofisi:            ($('officeNote').value || '').trim(),
+  };
+
+  const body = Object.entries(data)
+    .map(([k, v]) => encodeURIComponent(k) + '=' + encodeURIComponent(v))
+    .join('&');
+
+  fetch(SCRIPT_URL, {
+    method: 'POST',
+    mode:   'no-cors',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body,
+  })
+  .then(() => {
+    showToast('✅ Alhamdulillah! Taarifa zimehifadhiwa vizuri.');
+    const lastNum = regNo.split('/').pop();
+    localStorage.setItem('lastReg', parseInt(lastNum) || 0);
+    setTimeout(() => location.reload(), 2500);
+  })
+  .catch(() => {
+    showToast('❌ Tatizo la mtandao! Jaribu tena.');
+    btn.disabled = false;
+    btn.textContent = '✓ Hifadhi Taarifa';
+  });
+}
+
+/* ── PRINT SHEET BUILDER ─────────────────────────── */
+function buildPrintSheet() {
+  const gender   = document.querySelector('input[name="gender"]:checked');
+  const idType   = document.querySelector('input[name="idType"]:checked');
+  const photoSrc = $('photoPreview').src;
+  const hasPhoto = $('photoPreview').style.display !== 'none' && photoSrc && !photoSrc.endsWith('/');
+
+  // Extract QR canvas as image
+  const qrEl  = $('qrcode');
+  const qrImg = qrEl ? qrEl.querySelector('canvas, img') : null;
+  let qrHtml  = '';
+  if (qrImg) {
+    const src = qrImg.tagName === 'CANVAS' ? qrImg.toDataURL() : qrImg.src;
+    qrHtml = `<img src="${src}" style="width:60pt;height:60pt;display:block;">`;
+  }
+
+  const fullName   = $('fullName').value || '____________________';
+  const dateStr    = $('dateDisplay').innerText || '';
+  const regNo      = $('regNo').innerText || '';
+  const islamicNm  = $('islamicName').value || '—';
+  const reason     = $('reason').value || '—';
+
+  $('print-sheet').innerHTML = `
+  <div class="ps-header">
+    <span class="ps-arabic">بِسْمِ اللهِ الرَّحْمَنِ الرَّحِيمِ</span>
+    <h1>Fomu Rasmi ya Kusilimu</h1>
+    <p>Masjid Taqwa &middot; Kibaha, Mailimoja &nbsp;|&nbsp; &#128222; +255 713 813 787</p>
+  </div>
+  <div class="ps-body">
+
+    <!-- SECTION 1: Taarifa Binafsi -->
+    <div class="ps-section">
+      <span class="ps-badge">1. Taarifa Binafsi</span>
+      <div class="ps-line"></div>
+    </div>
+    <div class="ps-top-row">
+      <div class="ps-photo-box">
+        ${hasPhoto ? `<img src="${photoSrc}" alt="Picha">` : '<span>Picha<br>Hapa</span>'}
+      </div>
+      <div class="ps-top-fields">
+        <div class="ps-grid-3">
+          <div class="ps-field ps-col-span3">
+            <div class="ps-label">Jina Kamili</div>
+            <div class="ps-value" style="text-transform:uppercase;font-size:10pt;">${fullName}</div>
+          </div>
+          <div class="ps-field">
+            <div class="ps-label">Jina la Kiislamu</div>
+            <div class="ps-value" style="color:#0a3622;font-weight:700;">${islamicNm}</div>
+          </div>
+          <div class="ps-field">
+            <div class="ps-label">Tarehe ya Kuzaliwa</div>
+            <div class="ps-value">${V('dob')}</div>
+          </div>
+          <div class="ps-field">
+            <div class="ps-label">Jinsia</div>
+            <div class="ps-value">${gender ? gender.value : '—'}</div>
+          </div>
+          <div class="ps-field">
+            <div class="ps-label">Uraia</div>
+            <div class="ps-value">${$('citizenship').value || '—'}</div>
+          </div>
+          <div class="ps-field">
+            <div class="ps-label">Hali ya Ndoa</div>
+            <div class="ps-value">${V('maritalStatus')}</div>
+          </div>
+          <div class="ps-field">
+            <div class="ps-label">Aina ya Kitambulisho</div>
+            <div class="ps-value">${idType ? idType.value : '—'}</div>
+          </div>
+          <div class="ps-field ps-col-span2">
+            <div class="ps-label">Namba ya Kitambulisho</div>
+            <div class="ps-value">${V('idNumber')}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 2: Mawasiliano -->
+    <div class="ps-section">
+      <span class="ps-badge">2. Mawasiliano</span>
+      <div class="ps-line"></div>
+    </div>
+    <div class="ps-grid-3">
+      <div class="ps-field">
+        <div class="ps-label">Namba ya Simu</div>
+        <div class="ps-value">${V('phone')}</div>
+      </div>
+      <div class="ps-field ps-col-span2">
+        <div class="ps-label">Anwani / Mtaa</div>
+        <div class="ps-value">${V('address')}</div>
+      </div>
+      <div class="ps-field">
+        <div class="ps-label">Mtu wa Dharura</div>
+        <div class="ps-value">${V('emergencyName')}</div>
+      </div>
+      <div class="ps-field">
+        <div class="ps-label">Simu ya Dharura</div>
+        <div class="ps-value">${V('emergencyPhone')}</div>
+      </div>
+    </div>
+
+    <!-- SECTION 3: Kidini -->
+    <div class="ps-section">
+      <span class="ps-badge">3. Maelezo ya Kidini</span>
+      <div class="ps-line"></div>
+    </div>
+    <div class="ps-grid-2" style="margin-bottom:6pt;">
+      <div class="ps-field">
+        <div class="ps-label">Dini Uliyoifuata Kabla</div>
+        <div class="ps-value">${V('formerReligion')}</div>
+      </div>
+      <div class="ps-field ps-col-span2" style="grid-column:span 2;">
+        <div class="ps-label">Sababu za Kuingia Kwenye Uislamu</div>
+        <div class="ps-reason">${reason}</div>
+      </div>
+    </div>
+
+    <!-- DECLARATION -->
+    <div class="ps-declaration">
+      <p class="ps-decl-stmt">
+        Mimi <span class="ps-decl-name">${fullName}</span>
+        nathibitisha kuwa nimeamua kuingia katika dini ya Kiislamu kwa hiari yangu,
+        bila kulazimishwa wala kushawishiwa kwa maslahi ya kidunia. Nimetamka maneno ya Shahada:
+      </p>
+      <span class="ps-decl-arabic">"&#1571;&#1614;&#1588;&#1618;&#1607;&#1614;&#1583;&#1615; &#1571;&#1614;&#1606; &#1604;&#1614;&#1575; &#1573;&#1616;&#1604;&#1614;&#1607;&#1614; &#1573;&#1616;&#1604;&#1614;&#1617;&#1575; &#1575;&#1604;&#1604;&#1607;&#1615; &#1608;&#1614;&#1581;&#1618;&#1583;&#1614;&#1607;&#1615; &#1604;&#1614;&#1575; &#1588;&#1614;&#1585;&#1616;&#1610;&#1618;&#1603;&#1614; &#1604;&#1614;&#1607;&#1615;&#1548; &#1608;&#1614;&#1571;&#1614;&#1588;&#1618;&#1607;&#1614;&#1583;&#1615; &#1571;&#1614;&#1606;&#1614;&#1617; &#1605;&#1615;&#1581;&#1614;&#1605;&#1614;&#1617;&#1583;&#1611;&#1575; &#1593;&#1614;&#1576;&#1618;&#1583;&#1615;&#1607;&#1615; &#1608;&#1614;&#1585;&#1614;&#1587;&#1615;&#1608;&#1604;&#1615;&#1607;&#1615;"</span>
+      <div class="ps-decl-trans">
+        "Nashudia kuwa hapana mungu apasaye kuabudiwa kwa haki isipokuwa Allah,
+        na nashudia kuwa Muhammad ni mja na mtume wake."
+      </div>
+      <div class="ps-sig-row">
+        <div class="ps-sig-box">
+          <div class="ps-sig-line"></div>
+          <div class="ps-sig-lbl">Sahihi ya Msilimu</div>
+        </div>
+        <div class="ps-sig-box">
+          <div class="ps-sig-line">${dateStr}</div>
+          <div class="ps-sig-lbl">Tarehe</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 4: Ushahidi -->
+    <div class="ps-section" style="margin-top:10pt;">
+      <span class="ps-badge">4. Ushahidi wa Kusilimu</span>
+      <div class="ps-line"></div>
+    </div>
+    <div class="ps-witness-grid">
+      <!-- Shahidi 1 -->
+      <div class="ps-witness-card">
+        <div class="ps-witness-num">Shahidi wa Kwanza</div>
+        <div class="ps-field" style="margin-bottom:4pt;">
+          <div class="ps-label">Jina Kamili</div>
+          <div class="ps-value" style="text-transform:uppercase;">${V('witness1Name')}</div>
+        </div>
+        <div class="ps-grid-2" style="gap:4pt;">
+          <div class="ps-field">
+            <div class="ps-label">Simu</div>
+            <div class="ps-value">${V('witness1Phone')}</div>
+          </div>
+          <div class="ps-field">
+            <div class="ps-label">Uhusiano</div>
+            <div class="ps-value">${$('witness1Rel').value || '—'}</div>
+          </div>
+          <div class="ps-field">
+            <div class="ps-label">Namba ya ID</div>
+            <div class="ps-value">${V('witness1ID')}</div>
+          </div>
+          <div class="ps-field">
+            <div class="ps-label">Mtaa</div>
+            <div class="ps-value">${V('witness1Address')}</div>
+          </div>
+        </div>
+        <div class="ps-witness-sig">
+          <div class="ps-witness-sig-line"></div>
+          <div class="ps-witness-sig-lbl">Sahihi ya Shahidi wa Kwanza</div>
+        </div>
+      </div>
+      <!-- Shahidi 2 -->
+      <div class="ps-witness-card">
+        <div class="ps-witness-num">Shahidi wa Pili</div>
+        <div class="ps-field" style="margin-bottom:4pt;">
+          <div class="ps-label">Jina Kamili</div>
+          <div class="ps-value" style="text-transform:uppercase;">${V('witness2Name')}</div>
+        </div>
+        <div class="ps-grid-2" style="gap:4pt;">
+          <div class="ps-field">
+            <div class="ps-label">Simu</div>
+            <div class="ps-value">${V('witness2Phone')}</div>
+          </div>
+          <div class="ps-field">
+            <div class="ps-label">Uhusiano</div>
+            <div class="ps-value">${$('witness2Rel').value || '—'}</div>
+          </div>
+          <div class="ps-field">
+            <div class="ps-label">Namba ya ID</div>
+            <div class="ps-value">${V('witness2ID')}</div>
+          </div>
+          <div class="ps-field">
+            <div class="ps-label">Mtaa</div>
+            <div class="ps-value">${V('witness2Address')}</div>
+          </div>
+        </div>
+        <div class="ps-witness-sig">
+          <div class="ps-witness-sig-line"></div>
+          <div class="ps-witness-sig-lbl">Sahihi ya Shahidi wa Pili</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- OFFICE BAR -->
+    <div class="ps-office">
+      <div class="ps-reg-badge">
+        <div class="ps-reg-lbl">Namba ya Usajili</div>
+        <div class="ps-reg-val">${regNo}</div>
+      </div>
+      <div class="ps-office-note">
+        <div class="ps-note-lbl">Maoni ya Ofisi</div>
+        <div class="ps-note-val">${V('officeNote')}</div>
+      </div>
+      <div class="ps-qr-box">
+        ${qrHtml}
+        <div class="ps-qr-lbl">Namba ya Usajili QR</div>
+      </div>
+    </div>
+
+  </div>`;
+}
+
+/* ── PRINT TRIGGER ───────────────────────────────── */
+function triggerPrint() {
+  buildPrintSheet();
+  setTimeout(() => window.print(), 150);
+}
+
+window.addEventListener('beforeprint', buildPrintSheet);
+window.addEventListener('afterprint',  () => { $('print-sheet').innerHTML = ''; });
+
+/* ── INIT ────────────────────────────────────────── */
+window.onload = function () {
+  const now = new Date();
+
+  // Set max date for DOB to today
+  $('dob').max = now.toISOString().split('T')[0];
+
+  // Show today's date in the signature area
+  $('dateDisplay').innerText = now.toLocaleDateString('sw-TZ', { timeZone:'Africa/Nairobi' });
+
+  const yr = now.getFullYear().toString().slice(-2);
+
+  // Fetch next registration number from Google Apps Script
+  fetch(SCRIPT_URL)
+    .then(r => r.text())
+    .then(n => {
+      const reg = `MTK/FRK/0${yr}/${n.trim().padStart(3,'0')}`;
+      $('regNo').innerText = reg;
+      updateQRCode(reg);   // QR encodes the registration number only
+    })
+    .catch(() => {
+      const last = parseInt(localStorage.getItem('lastReg') || '0') + 1;
+      const reg  = `MTK/FRK/0${yr}/${last.toString().padStart(3,'0')}`;
+      $('regNo').innerText = reg;
+      updateQRCode(reg);
     });
-
-    // Override window.print to also build print sheet
-    const _origPrint = window.print.bind(window);
-    window.print = function () {
-        buildPrintSheet();
-        setTimeout(_origPrint, 100);
-    };
-
-    function showToast(msg) {
-        const t = document.getElementById('toast');
-        t.textContent = msg;
-        t.classList.add('show');
-        setTimeout(() => t.classList.remove('show'), 3500);
-    }
-
-    // ── INIT ─────────────────────────────────────────────────────
-    window.onload = function () {
-        const now = new Date();
-        document.getElementById('dob').max = now.toISOString().split("T")[0];
-        document.getElementById('dateDisplay').innerText = now.toLocaleDateString('sw-TZ', { timeZone: 'Africa/Nairobi' });
-
-        const yr = now.getFullYear().toString().slice(-2);
-
-        fetch(SCRIPT_URL)
-            .then(r => r.text())
-            .then(n => {
-                const reg = `MTK/FRK/0${yr}/${n.trim().padStart(3, '0')}`;
-                document.getElementById('regNo').innerText = reg;
-                updateQRCode(reg);
-            })
-            .catch(() => {
-                const last = parseInt(localStorage.getItem('lastReg') || '0') + 1;
-                const reg = `MTK/FRK/0${yr}/${last.toString().padStart(3, '0')}`;
-                document.getElementById('regNo').innerText = reg;
-                updateQRCode(reg);
-            });
-    };
+};
 </script>
 </body>
 </html>
